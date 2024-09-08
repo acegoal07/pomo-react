@@ -3,7 +3,7 @@
   "projectName": "pomo-react",
   "packages": [
     {
-      "name": "react-navigation",
+      "name": "expo-router",
       "type": "navigation",
       "options": {
         "type": "stack"

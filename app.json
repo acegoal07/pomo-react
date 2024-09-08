@@ -4,15 +4,18 @@
     "slug": "pomo-react",
     "version": "1.0.0",
 
+    "scheme": "pomo-react",
     "web": {
+      "bundler": "metro",
+      "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-
+    "plugins": ["expo-router"],
     "experiments": {
+      "typedRoutes": true,
+
       "tsconfigPaths": true
     },
-
-    "plugins": [],
 
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
