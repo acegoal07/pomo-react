@@ -4,6 +4,8 @@ import { StyleSheet, View, Text, Image } from 'react-native';
 import UtilityBelt from '../components/utilitybelt';
 import { backgroundColor } from '../constants/colours';
 
+import Timer from '~/components/timer';
+
 export default function Pomo() {
   const [counter, setCounter] = React.useState(0);
   return (
@@ -12,6 +14,7 @@ export default function Pomo() {
         <Image style={styles.logo} source={require('../assets/images/pomoLogo.webp')} />
       </View>
       <UtilityBelt counter={counter} setCounter={setCounter} />
+      <Timer />
       <Text>Pomo is back and this time in react</Text>
     </View>
   );
