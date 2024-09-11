@@ -77,7 +77,11 @@ export default function UtilityBelt({ counter, setCounter }: UtilityBeltProps) {
         onPointerEnter={() => handleIconHover('login')}
         onPointerLeave={() => handleIconHover('login')}
         onPress={handleLoginPress}>
-        <Image style={styles.icons} source={require('../assets/images/loginIcon.webp')} />
+        <Image
+          style={styles.icons}
+          resizeMode="contain"
+          source={require('../assets/images/loginIcon.webp')}
+        />
       </Pressable>
       <Pressable
         style={
@@ -88,7 +92,11 @@ export default function UtilityBelt({ counter, setCounter }: UtilityBeltProps) {
         onPointerEnter={() => handleIconHover('information')}
         onPointerLeave={() => handleIconHover('information')}
         onPress={handleInformationPress}>
-        <Image style={styles.icons} source={require('../assets/images/informationIcon.webp')} />
+        <Image
+          style={styles.icons}
+          resizeMode="contain"
+          source={require('../assets/images/informationIcon.webp')}
+        />
       </Pressable>
     </View>
   );
@@ -109,21 +117,13 @@ const styles = StyleSheet.create({
     maxHeight: 73.6,
     height: '100%',
     maxWidth: 73.6,
-    resizeMode: 'contain',
-    shadowColor: '#000',
   },
   iconShadow: {
     borderRadius: 50,
-    shadowOffset: { width: 1, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
   },
   iconHover: {
-    shadowOffset: { width: 2, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 4.84,
-    elevation: 7,
+    boxShadow: '0px 0px 9px rgba(0, 0, 0, 0.5)',
   },
   counter: {
     fontSize: 60,
