@@ -1,14 +1,16 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Image, useWindowDimensions } from 'react-native';
 
 import UtilityBelt from '../components/utilitybelt';
 import { backgroundColor } from '../constants/colours';
 
 import Timer from '~/components/timer';
+import Todos from '~/components/todos';
 
 export default function Pomo() {
   const [pomoCount, setPomoCount] = React.useState(0);
   const [counter, setCounter] = React.useState(0);
+  const [pageLayout, setPageLayout] = React.useState('row');
 
   React.useEffect(() => {
     if (pomoCount === 8) {
@@ -16,6 +18,15 @@ export default function Pomo() {
       setCounter((prev) => prev + 1);
     }
   }, [pomoCount]);
+
+  React.useEffect(() => {
+    if (window.innerWidth < 1400) {
+      setPageLayout('column');
+    } else {
+      setPageLayout('row');
+    }
+    console.log(pageLayout);
+  }, [useWindowDimensions().width]);
 
   return (
     <View style={styles.bodyContainer}>
@@ -27,8 +38,17 @@ export default function Pomo() {
         />
       </View>
       <UtilityBelt counter={counter} setCounter={setCounter} />
-      <Timer setPomoCounter={setPomoCount} />
-      <Text>Pomo is back and this time in react</Text>
+      <View
+        style={{
+          ...styles.componentsContainer,
+          flexDirection: pageLayout === 'row' ? 'row' : 'column',
+          marginRight: pageLayout === 'row' ? 80 : 0,
+          marginLeft: pageLayout === 'row' ? 80 : 0,
+          gap: pageLayout === 'row' ? 200 : 30,
+        }}>
+        <Timer pomoCounter={pomoCount} setPomoCounter={setPomoCount} />
+        <Todos />
+      </View>
     </View>
   );
 }
@@ -51,5 +71,10 @@ export const styles = StyleSheet.create({
   logo: {
     height: '100%',
     width: '100%',
+  },
+  componentsContainer: {
+    justifyContent: 'center',
+    gap: 200,
+    marginTop: 20,
   },
 });

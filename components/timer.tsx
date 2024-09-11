@@ -3,11 +3,12 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 import { backgroundColor, foregroundColor } from '~/constants/colours';
 
-interface timerProps {
+interface TimerProps {
+  pomoCounter: number;
   setPomoCounter: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Timer({ setPomoCounter }: timerProps) {
+export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerProps>) {
   const [iconHover, setIconHover] = React.useState({
     start: false,
     stop: false,
@@ -26,7 +27,11 @@ export default function Timer({ setPomoCounter }: timerProps) {
 
   const startTimer = () => {
     if (timeOutput.current === 0) {
-      timeOutput.current = 25 * 60000;
+      if (pomoCounter % 2 !== 0) {
+        timeOutput.current = 5 * 60000;
+      } else {
+        timeOutput.current = 25 * 60000;
+      }
     }
     setCounter(msToTime(timeOutput.current));
     intervalID.current = setInterval(() => {
@@ -116,6 +121,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: foregroundColor,
     borderRadius: 10,
+    padding: 20,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -131,7 +137,10 @@ const styles = StyleSheet.create({
   },
   counter: {
     fontSize: 70,
+    fontWeight: 'bold',
     color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 1)',
+    textShadowRadius: 6,
   },
   buttonsContainer: {
     marginTop: 10,
