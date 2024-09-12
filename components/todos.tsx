@@ -1,12 +1,64 @@
-import { Text, StyleSheet, View, Pressable } from 'react-native';
+import React from 'react';
+import { Text, StyleSheet, View, Pressable, FlatList } from 'react-native';
 
 import { accentColor, foregroundColor } from '~/constants/colours';
 
-export default function Todos() {
+interface TodosProps {
+  todoList: { id: number; todo: string }[];
+  setTodoList: React.Dispatch<React.SetStateAction<{ id: number; todo: string }[]>>;
+}
+
+export default function Todos({ todoList, setTodoList }: Readonly<TodosProps>) {
+  const [buttonHover, setButtonHover] = React.useState<{ add: boolean }>({
+    add: false,
+  });
+
+  /**
+   * Handle the mouse entering the button and adds the hover effect
+   * @param {string} button The button that the mouse has entered
+   */
+  function handleMouseEnter(button: string) {
+    setButtonHover({ ...buttonHover, [button]: true });
+  }
+
+  /**
+   * Handle the mouse leaving the button and removes the hover effect
+   * @param {string} button The button that the mouse has left
+   */
+  function handleMouseLeave(button: string) {
+    setButtonHover({ ...buttonHover, [button]: false });
+  }
+
+  /**
+   * Handle the press event for the add todo button
+   */
+  function handleAddTodoPress() {
+    console.log('Add todo pressed');
+  }
+
+  /**
+   * Render the todo item
+   * @param {id: number, todo: string }[]} item The todo item to render
+   * @returns {JSX.Element} The JSX element for the todo item
+   */
+  function renderTodoItem({ item }: { item: { id: number; todo: string } }) {
+    return (
+      <View style={styles.todoItem}>
+        <Text style={styles.todoItemText}>{item.todo}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.bodyContainer}>
       <Text style={styles.title}>Todos</Text>
-      <Pressable style={styles.addTodoButton}>
+      <Pressable
+        style={
+          buttonHover.add ? [styles.addTodoButton, styles.addTodoButtonHover] : styles.addTodoButton
+        }
+        onPointerEnter={() => handleMouseEnter('add')}
+        onPointerLeave={() => handleMouseLeave('add')}
+        onPress={handleAddTodoPress}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 448 512"
@@ -14,9 +66,7 @@ export default function Todos() {
           <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />
         </svg>
       </Pressable>
-      <View style={styles.todoItem}>
-        <Text style={styles.todoItemText}>Todo item will be here</Text>
-      </View>
+      <FlatList data={todoList} renderItem={renderTodoItem} />
     </View>
   );
 }
@@ -44,6 +94,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     width: 50,
+    boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
+  },
+  addTodoButtonHover: {
     boxShadow: '0px 0px 9px rgba(0, 0, 0, 0.5)',
   },
   addTodoButtonText: {
@@ -52,7 +105,10 @@ const styles = StyleSheet.create({
     height: 30,
   },
   todoItem: {
-    width: '100%',
+    width: '95%',
+    alignSelf: 'center',
+    marginBottom: 8,
+    marginTop: 8,
     backgroundColor: accentColor,
     padding: 15,
     borderRadius: 10,

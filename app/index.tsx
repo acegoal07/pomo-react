@@ -11,7 +11,11 @@ export default function Pomo() {
   const [pomoCount, setPomoCount] = React.useState(0);
   const [counter, setCounter] = React.useState(0);
   const [pageLayout, setPageLayout] = React.useState('row');
+  const [todoList, setTodoList] = React.useState<{ id: number; todo: string }[]>([]);
 
+  /**
+   * Reset the pomo count and increment the counter when the pomo count reaches 8
+   */
   React.useEffect(() => {
     if (pomoCount === 8) {
       setPomoCount(0);
@@ -19,13 +23,15 @@ export default function Pomo() {
     }
   }, [pomoCount]);
 
+  /**
+   * Get the window dimensions
+   */
   React.useEffect(() => {
     if (window.innerWidth < 1400) {
       setPageLayout('column');
     } else {
       setPageLayout('row');
     }
-    console.log(pageLayout);
   }, [useWindowDimensions().width]);
 
   return (
@@ -47,7 +53,7 @@ export default function Pomo() {
           gap: pageLayout === 'row' ? 200 : 30,
         }}>
         <Timer pomoCounter={pomoCount} setPomoCounter={setPomoCount} />
-        <Todos />
+        <Todos todoList={todoList} setTodoList={setTodoList} />
       </View>
     </View>
   );

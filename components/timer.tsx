@@ -9,28 +9,41 @@ interface TimerProps {
 }
 
 export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerProps>) {
-  const [iconHover, setIconHover] = React.useState({
+  const [buttonHover, setButtonHover] = React.useState<{ start: boolean; stop: boolean }>({
     start: false,
     stop: false,
   });
-  const timeOutput = React.useRef(25 * 60000);
+  const breakTime = 5 * 60000;
+  const workTime = 25 * 60000;
+  const timeOutput = React.useRef<number>(workTime);
   const [counter, setCounter] = React.useState('25:00');
   const intervalID = React.useRef<NodeJS.Timeout | null>(null);
 
-  function handleMouseEnter(icon: string) {
-    setIconHover({ ...iconHover, [icon]: true });
+  /**
+   * Handle the mouse entering the button and adds the hover effect
+   * @param {string} button The button that the mouse has entered
+   */
+  function handleMouseEnter(button: string) {
+    setButtonHover({ ...buttonHover, [button]: true });
   }
 
-  function handleMouseLeave(icon: string) {
-    setIconHover({ ...iconHover, [icon]: false });
+  /**
+   * Handle the mouse leaving the button and removes the hover effect
+   * @param {string} button The button that the mouse has left
+   */
+  function handleMouseLeave(button: string) {
+    setButtonHover({ ...buttonHover, [button]: false });
   }
 
-  const startTimer = () => {
+  /**
+   * Start the timer
+   */
+  function startTimer() {
     if (timeOutput.current === 0) {
       if (pomoCounter % 2 !== 0) {
-        timeOutput.current = 5 * 60000;
+        timeOutput.current = breakTime;
       } else {
-        timeOutput.current = 25 * 60000;
+        timeOutput.current = workTime;
       }
     }
     setCounter(msToTime(timeOutput.current));
@@ -45,12 +58,15 @@ export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerPro
         }
       }
     }, 1000);
-  };
+  }
 
-  const stopTimer = () => {
+  /**
+   * Stop the timer
+   */
+  function stopTimer() {
     clearInterval(intervalID.current!);
     intervalID.current = null;
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -63,7 +79,7 @@ export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerPro
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 384 512"
             style={
-              iconHover.start
+              buttonHover.start
                 ? { ...styles.buttonIcons, ...styles.buttonIconsHover }
                 : styles.buttonIcons
             }>
@@ -79,7 +95,7 @@ export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerPro
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 320 512"
             style={
-              iconHover.stop
+              buttonHover.stop
                 ? { ...styles.buttonIcons, ...styles.buttonIconsHover }
                 : styles.buttonIcons
             }>

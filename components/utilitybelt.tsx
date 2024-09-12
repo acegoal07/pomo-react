@@ -8,53 +8,53 @@ interface UtilityBeltProps {
   setCounter: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function UtilityBelt({ counter, setCounter }: UtilityBeltProps) {
-  const [buttonHover, setButtonHover] = React.useState({
+export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBeltProps>) {
+  const [buttonHover, setButtonHover] = React.useState<{
+    leaderboard: boolean;
+    login: boolean;
+    information: boolean;
+  }>({
     leaderboard: false,
     login: false,
     information: false,
   });
 
   /**
-   * Handle the hover state of the icons
-   * @param {'leaderboard' | 'login' | 'information'} target - The icon that is being hovered
+   * Handle the mouse entering the button and adds the hover effect
+   * @param {string} button The button that the mouse has entered
    */
-  const handleIconHover = (target: 'leaderboard' | 'login' | 'information') => {
-    switch (target) {
-      case 'leaderboard':
-        setButtonHover({ ...buttonHover, leaderboard: !buttonHover.leaderboard });
-        break;
-      case 'login':
-        setButtonHover({ ...buttonHover, login: !buttonHover.login });
-        break;
-      case 'information':
-        setButtonHover({ ...buttonHover, information: !buttonHover.information });
-        break;
-      default:
-        throw new Error('Invalid hover target');
-    }
-  };
+  function handleMouseEnter(button: string) {
+    setButtonHover({ ...buttonHover, [button]: true });
+  }
+
+  /**
+   * Handle the mouse leaving the button and removes the hover effect
+   * @param {string} button The button that the mouse has left
+   */
+  function handleMouseLeave(button: string) {
+    setButtonHover({ ...buttonHover, [button]: false });
+  }
 
   /**
    * Handle the press event for the leaderboard icon
    */
-  const handleLeaderBoardPress = () => {
+  function handleLeaderBoardPress() {
     console.log('Leaderboard pressed');
-  };
+  }
 
   /**
    * Handle the press event for the login icon
    */
-  const handleLoginPress = () => {
+  function handleLoginPress() {
     console.log('Login pressed');
-  };
+  }
 
   /**
    * Handle the press event for the information icon
    */
-  const handleInformationPress = () => {
+  function handleInformationPress() {
     console.log('Information pressed');
-  };
+  }
 
   return (
     <View style={styles.utilityBelt}>
@@ -64,8 +64,8 @@ export default function UtilityBelt({ counter, setCounter }: UtilityBeltProps) {
             ? { ...styles.iconShadow, ...styles.iconHover }
             : styles.iconShadow
         }
-        onPointerEnter={() => handleIconHover('leaderboard')}
-        onPointerLeave={() => handleIconHover('leaderboard')}
+        onPointerEnter={() => handleMouseEnter('leaderboard')}
+        onPointerLeave={() => handleMouseLeave('leaderboard')}
         onPress={handleLeaderBoardPress}>
         <Image style={styles.icons} source={require('../assets/images/leaderboardIcon.webp')} />
       </Pressable>
@@ -74,8 +74,8 @@ export default function UtilityBelt({ counter, setCounter }: UtilityBeltProps) {
         style={
           buttonHover.login ? { ...styles.iconShadow, ...styles.iconHover } : styles.iconShadow
         }
-        onPointerEnter={() => handleIconHover('login')}
-        onPointerLeave={() => handleIconHover('login')}
+        onPointerEnter={() => handleMouseEnter('login')}
+        onPointerLeave={() => handleMouseLeave('login')}
         onPress={handleLoginPress}>
         <Image
           style={styles.icons}
@@ -89,8 +89,8 @@ export default function UtilityBelt({ counter, setCounter }: UtilityBeltProps) {
             ? { ...styles.iconShadow, ...styles.iconHover }
             : styles.iconShadow
         }
-        onPointerEnter={() => handleIconHover('information')}
-        onPointerLeave={() => handleIconHover('information')}
+        onPointerEnter={() => handleMouseEnter('information')}
+        onPointerLeave={() => handleMouseLeave('information')}
         onPress={handleInformationPress}>
         <Image
           style={styles.icons}
