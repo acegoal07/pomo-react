@@ -10,7 +10,7 @@ import Todos from '~/components/todos';
 export default function Pomo() {
   const [pomoCount, setPomoCount] = React.useState(0);
   const [counter, setCounter] = React.useState(0);
-  const [pageLayout, setPageLayout] = React.useState('row');
+  const [pageLayout, setPageLayout] = React.useState(true);
   const [todoList, setTodoList] = React.useState<{ id: number; todo: string }[]>([]);
 
   /**
@@ -28,9 +28,9 @@ export default function Pomo() {
    */
   React.useEffect(() => {
     if (window.innerWidth < 1400) {
-      setPageLayout('column');
+      setPageLayout(false);
     } else {
-      setPageLayout('row');
+      setPageLayout(true);
     }
   }, [useWindowDimensions().width]);
 
@@ -47,10 +47,10 @@ export default function Pomo() {
       <View
         style={{
           ...styles.componentsContainer,
-          flexDirection: pageLayout === 'row' ? 'row' : 'column',
-          marginRight: pageLayout === 'row' ? 80 : 0,
-          marginLeft: pageLayout === 'row' ? 80 : 0,
-          gap: pageLayout === 'row' ? 200 : 30,
+          flexDirection: pageLayout ? 'row' : 'column',
+          marginRight: pageLayout ? 80 : 0,
+          marginLeft: pageLayout ? 80 : 0,
+          gap: pageLayout ? 200 : 30,
         }}>
         <Timer pomoCounter={pomoCount} setPomoCounter={setPomoCount} />
         <Todos todoList={todoList} setTodoList={setTodoList} />

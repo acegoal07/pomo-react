@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, View, Pressable, FlatList } from 'react-native';
+import CheckBox from 'react-native-bouncy-checkbox';
 
 import { accentColor, foregroundColor } from '~/constants/colours';
 
@@ -37,13 +38,30 @@ export default function Todos({ todoList, setTodoList }: Readonly<TodosProps>) {
   }
 
   /**
+   * Handle the press event for the delete todo button
+   * @param {{id: number, todo: string}} item The todo item to delete
+   */
+  function handleDeleteTodoPress(item: { id: number; todo: string }) {
+    console.log('Delete todo pressed');
+  }
+
+  /**
    * Render the todo item
    * @param {id: number, todo: string }[]} item The todo item to render
    * @returns {JSX.Element} The JSX element for the todo item
    */
-  function renderTodoItem({ item }: { item: { id: number; todo: string } }) {
+  function renderTodoItem({ item }: { item: { id: number; todo: string } }): JSX.Element {
     return (
       <View style={styles.todoItem}>
+        <View style={styles.checkBoxContainer}>
+          <CheckBox
+            size={40}
+            fillColor="transparent"
+            iconImageStyle={{ tintColor: 'white', width: 30, height: 30 }}
+            innerIconStyle={{ borderRadius: 5, borderColor: 'white', borderWidth: 2 }}
+            onPress={() => handleDeleteTodoPress(item)}
+          />
+        </View>
         <Text style={styles.todoItemText}>{item.todo}</Text>
       </View>
     );
@@ -77,6 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: foregroundColor,
     padding: 20,
     borderRadius: 10,
+    maxHeight: 600,
     boxShadow: '0px 0px 9px rgba(0, 0, 0, 0.5)',
   },
   title: {
@@ -107,6 +126,7 @@ const styles = StyleSheet.create({
   todoItem: {
     width: '95%',
     alignSelf: 'center',
+    flexDirection: 'row',
     marginBottom: 8,
     marginTop: 8,
     backgroundColor: accentColor,
@@ -117,5 +137,8 @@ const styles = StyleSheet.create({
   todoItemText: {
     color: 'white',
     fontSize: 24,
+  },
+  checkBoxContainer: {
+    justifyContent: 'center',
   },
 });
