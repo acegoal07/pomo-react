@@ -39,6 +39,11 @@ export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerPro
    * Start the timer
    */
   function startTimer() {
+
+    if (intervalID.current) {
+      return;
+    }
+    
     if (timeOutput.current === 0) {
       if (pomoCounter % 2 !== 0) {
         timeOutput.current = breakTime;
