@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import LoginPopup from './loginPopup';
 
 import { accentColor } from '../constants/colours';
 
@@ -45,8 +46,14 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
   /**
    * Handle the press event for the login icon
    */
+
+  const [loginPopupVisible, setLoginPopupVisible] = React.useState(false);
   function handleLoginPress() {
     console.log('Login pressed');
+    setLoginPopupVisible(true);
+  
+
+
   }
 
   /**
@@ -98,6 +105,7 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
           source={require('../assets/images/informationIcon.webp')}
         />
       </Pressable>
+      <LoginPopup visible={loginPopupVisible} onClose={() => setLoginPopupVisible(false)} />
     </View>
   );
 }
