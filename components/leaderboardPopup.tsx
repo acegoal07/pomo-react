@@ -2,12 +2,12 @@ import React from 'react';
 import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
 
 
-interface LoginPopupProps {
+interface LeaderboardPopupProps {
     visible: boolean;
     onClose: () => void;
 }
 
-export default function LoginPopup({ visible, onClose }: LoginPopupProps) {
+export default function LeaderboardPopup({ visible, onClose }: LeaderboardPopupProps) {
     return (
         <Modal
             animationType="fade"
@@ -17,8 +17,7 @@ export default function LoginPopup({ visible, onClose }: LoginPopupProps) {
         >
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>Login</Text>
-                    <Text>form will go here</Text>
+                    <Text style={styles.modalTitle}>Leaderboard</Text>
                     <Pressable style={styles.closeButton} onPress={onClose}>
                         <Text style={styles.closeButtonText}>Close</Text>
                     </Pressable>

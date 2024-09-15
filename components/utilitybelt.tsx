@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
-import LoginPopup from './loginPopup';
 
+import InformationPopup from './informationPopup';
+import LeaderboardPopup from './leaderboardPopup';
+import LoginPopup from './loginPopup';
 import { accentColor } from '../constants/colours';
 
 interface UtilityBeltProps {
@@ -39,8 +41,11 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
   /**
    * Handle the press event for the leaderboard icon
    */
+  const [leaderboardPopupVisible, setLeaderboardPopupVisible] = React.useState(false);
   function handleLeaderBoardPress() {
     console.log('Leaderboard pressed');
+    setLeaderboardPopupVisible(true);
+   
   }
 
   /**
@@ -59,8 +64,10 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
   /**
    * Handle the press event for the information icon
    */
+  const [informationPopupVisible, setInformationPopupVisible] = React.useState(false);
   function handleInformationPress() {
     console.log('Information pressed');
+    setInformationPopupVisible(true);
   }
 
   return (
@@ -106,6 +113,14 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
         />
       </Pressable>
       <LoginPopup visible={loginPopupVisible} onClose={() => setLoginPopupVisible(false)} />
+      <LeaderboardPopup
+        visible={leaderboardPopupVisible}
+        onClose={() => setLeaderboardPopupVisible(false)}
+      />
+      <InformationPopup
+        visible={informationPopupVisible}
+        onClose={() => setInformationPopupVisible(false)}
+      />
     </View>
   );
 }
