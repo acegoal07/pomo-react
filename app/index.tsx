@@ -1,4 +1,4 @@
-import  from 'react';
+import React from 'react';
 import { StyleSheet, View, Image, useWindowDimensions } from 'react-native';
 
 import UtilityBelt from '../components/utilitybelt';
