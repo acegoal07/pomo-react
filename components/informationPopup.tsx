@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
 
+import { backgroundColor } from '~/constants/colours';
+
 interface InformationPopupProps {
   visible: boolean;
   onClose: () => void;
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
   modalContent: {
     width: '80%',
     padding: 20,
-    backgroundColor: 'yellow',
+    backgroundColor: backgroundColor,
     borderRadius: 10,
     alignItems: 'center',
   },

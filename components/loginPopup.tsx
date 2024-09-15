@@ -1,60 +1,106 @@
-import React from 'react';
-import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
-
+import React, { useState } from 'react';
+import { View, Text, Pressable, Modal, StyleSheet, TextInput } from 'react-native';
+import { backgroundColor } from '~/constants/colours';
 
 interface LoginPopupProps {
-    visible: boolean;
-    onClose: () => void;
+  visible: boolean;
+  onClose: () => void;
 }
 
 export default function LoginPopup({ visible, onClose }: LoginPopupProps) {
-    return (
-        <Modal
-            animationType="fade"
-            transparent={true}
-            visible={visible}
-            onRequestClose={onClose}
-        >
-            <View style={styles.modalOverlay}>
-                <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>Login</Text>
-                    <Text>form will go here</Text>
-                    <Pressable style={styles.closeButton} onPress={onClose}>
-                        <Text style={styles.closeButtonText}>Close</Text>
-                    </Pressable>
-                </View>
-            </View>
-        </Modal>
-    );
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    // Handle login logic here
+    console.log('Username:', username);
+    console.log('Password:', password);
+    onClose();
+  };
+
+  return (
+    <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={onClose}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Login</Text>
+
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+            <Pressable style={styles.submit} onPress={handleLogin}>
+              <Text style={styles.submitText}>Submit</Text>
+            </Pressable>
+          </View>
+
+          <Pressable style={styles.closeButton} onPress={onClose}>
+            <Text style={styles.closeButtonText}>Close</Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
+  );
 }
 
 const styles = StyleSheet.create({
-    modalOverlay: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        width: '80%',
-        padding: 20,
-        backgroundColor: 'yellow' ,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-    modalTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    closeButton: {
-        marginTop: 20,
-        padding: 10,
-        backgroundColor: '#2196F3',
-        borderRadius: 5,
-    },
-    closeButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: backgroundColor,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#2196F3',
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  form: {
+    width: '100%',
+    flexDirection: 'column',
+    gap: 10,
+  },
+  input: {
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    width: '100%',
+  },
+  submit: {
+    padding: 10,
+    backgroundColor: '#2196F3',
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  submitText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });
