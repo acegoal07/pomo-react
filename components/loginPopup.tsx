@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, Modal, StyleSheet, TextInput } from 'react-native';
-import { backgroundColor } from '~/constants/colours';
+import { backgroundColor , accentColor} from '~/constants/colours';
 
 interface LoginPopupProps {
   visible: boolean;
@@ -23,6 +23,9 @@ export default function LoginPopup({ visible, onClose }: LoginPopupProps) {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Login</Text>
+          <Pressable style={styles.closeButton} onPress={onClose}>
+            <Text style={styles.closeButtonText}>X</Text>
+          </Pressable>
 
           <View style={styles.form}>
             <TextInput
@@ -43,9 +46,7 @@ export default function LoginPopup({ visible, onClose }: LoginPopupProps) {
             </Pressable>
           </View>
 
-          <Pressable style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>Close</Text>
-          </Pressable>
+         
         </View>
       </View>
     </Modal>
@@ -65,17 +66,22 @@ const styles = StyleSheet.create({
     backgroundColor: backgroundColor,
     borderRadius: 10,
     alignItems: 'center',
+    position: 'relative',
   },
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'white',
   },
   closeButton: {
-    marginTop: 20,
     padding: 10,
-    backgroundColor: '#2196F3',
+    backgroundColor: accentColor,
     borderRadius: 5,
+    position: 'absolute',
+    top: 10,
+    right: 20,
+
   },
   closeButtonText: {
     color: 'white',
@@ -95,7 +101,7 @@ const styles = StyleSheet.create({
   },
   submit: {
     padding: 10,
-    backgroundColor: '#2196F3',
+    backgroundColor: accentColor,
     borderRadius: 5,
     alignItems: 'center',
   },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
 
-import { backgroundColor } from '~/constants/colours';
+import { backgroundColor, accentColor} from '~/constants/colours';
 
 interface InformationPopupProps {
   visible: boolean;
@@ -15,7 +15,7 @@ export default function IInformationPopup({ visible, onClose }: InformationPopup
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Information</Text>
           <Pressable style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>Close</Text>
+            <Text style={styles.closeButtonText}>X</Text>
           </Pressable>
         </View>
       </View>
@@ -36,17 +36,22 @@ const styles = StyleSheet.create({
     backgroundColor: backgroundColor,
     borderRadius: 10,
     alignItems: 'center',
+    position: 'relative',
   },
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'white',
   },
   closeButton: {
-    marginTop: 20,
     padding: 10,
-    backgroundColor: '#2196F3',
+    backgroundColor: accentColor,
     borderRadius: 5,
+    position: 'absolute',
+    right: 20,
+    top: 10,
+
   },
   closeButtonText: {
     color: 'white',
