@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, View, Pressable, FlatList } from 'react-native';
 import CheckBox from 'react-native-bouncy-checkbox';
-import Svg, { Path } from 'react-native-svg';
+import { Svg, Path } from 'react-native-svg';
 
 import { accentColor, foregroundColor } from '~/constants/colours';
 
