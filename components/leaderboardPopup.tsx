@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
+import { Svg, Path } from 'react-native-svg';
 
 import { backgroundColor, accentColor } from '~/constants/colours';
 
@@ -15,7 +16,9 @@ export default function LeaderboardPopup({ visible, onClose }: Readonly<Leaderbo
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Leaderboard</Text>
           <Pressable style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>X</Text>
+            <Svg viewBox="0 0 384 512" style={styles.closeButtonText}>
+              <Path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+            </Svg>
           </Pressable>
         </View>
       </View>
@@ -32,13 +35,10 @@ const styles = StyleSheet.create({
     backdropFilter: 'blur(10px)',
   },
   modalContent: {
-    width: '80%',
-    height: '80%',
+    minWidth: 250,
     padding: 20,
     backgroundColor,
     borderRadius: 10,
-    alignItems: 'center',
-    position: 'relative',
     border: `5px solid ${accentColor}`,
   },
   modalTitle: {
@@ -49,14 +49,15 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     top: 10,
-    right: 20,
-    padding: 10,
+    right: 10,
+    padding: 2,
     backgroundColor: accentColor,
     borderRadius: 5,
     position: 'absolute',
   },
   closeButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    height: 30,
+    width: 30,
+    fill: 'white',
   },
 });
