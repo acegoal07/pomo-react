@@ -10,8 +10,9 @@ import Todos from '~/components/todos';
 export default function Pomo() {
   const [pomoCount, setPomoCount] = React.useState(0);
   const [counter, setCounter] = React.useState(0);
-  const [pageLayout, setPageLayout] = React.useState(window.innerWidth > 1400);
+  const [pageLayout, setPageLayout] = React.useState(true);
   const [todoList, setTodoList] = React.useState<{ id: number; todo: string }[]>([]);
+  const windowDimensions = useWindowDimensions();
 
   /**
    * Reset the pomo count and increment the counter when the pomo count reaches 8
@@ -27,12 +28,12 @@ export default function Pomo() {
    * Get the window dimensions
    */
   React.useEffect(() => {
-    if (window.innerWidth < 1400) {
+    if (windowDimensions.width < 600) {
       setPageLayout(false);
     } else {
       setPageLayout(true);
     }
-  }, [useWindowDimensions().width]);
+  }, [windowDimensions.width]);
 
   return (
     <View style={styles.bodyContainer}>
@@ -45,13 +46,11 @@ export default function Pomo() {
       </View>
       <UtilityBelt counter={counter} setCounter={setCounter} />
       <View
-        style={{
-          ...styles.componentsContainer,
-          flexDirection: pageLayout ? 'row' : 'column',
-          marginRight: pageLayout ? 80 : 0,
-          marginLeft: pageLayout ? 80 : 0,
-          gap: pageLayout ? 200 : 30,
-        }}>
+        style={[
+          styles.componentsContainer,
+          pageLayout ? styles.rowLayout : styles.columnLayout,
+        ]}
+      >
         <Timer pomoCounter={pomoCount} setPomoCounter={setPomoCount} />
         <Todos todoList={todoList} setTodoList={setTodoList} />
       </View>
@@ -59,7 +58,7 @@ export default function Pomo() {
   );
 }
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   bodyContainer: {
     backgroundColor,
     flex: 1,
@@ -80,7 +79,14 @@ export const styles = StyleSheet.create({
   },
   componentsContainer: {
     justifyContent: 'center',
-    gap: 200,
     marginTop: 20,
+  },
+  rowLayout: {
+    flexDirection: 'row',
+    gap:20,
+  },
+  columnLayout: {
+    flexDirection: 'column',
+    gap: 20,
   },
 });
