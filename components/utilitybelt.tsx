@@ -136,10 +136,16 @@ const styles = StyleSheet.create({
   },
   iconShadow: {
     borderRadius: 50,
-    boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
   },
   iconHover: {
-    boxShadow: '0px 0px 9px rgba(0, 0, 0, 0.5)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 9,
   },
   counter: {
     fontSize: 60,

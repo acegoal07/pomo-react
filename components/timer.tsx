@@ -10,31 +10,11 @@ interface TimerProps {
 }
 
 export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerProps>) {
-  const [buttonHover, setButtonHover] = React.useState<{ start: boolean; stop: boolean }>({
-    start: false,
-    stop: false,
-  });
   const breakTime = 5 * 60000;
   const workTime = 25 * 60000;
   const timeOutput = React.useRef<number>(workTime);
   const [counter, setCounter] = React.useState('25:00');
   const intervalID = React.useRef<NodeJS.Timeout | null>(null);
-
-  /**
-   * Handle the mouse entering the button and adds the hover effect
-   * @param {string} button The button that the mouse has entered
-   */
-  function handleMouseEnter(button: string) {
-    setButtonHover({ ...buttonHover, [button]: true });
-  }
-
-  /**
-   * Handle the mouse leaving the button and removes the hover effect
-   * @param {string} button The button that the mouse has left
-   */
-  function handleMouseLeave(button: string) {
-    setButtonHover({ ...buttonHover, [button]: false });
-  }
 
   /**
    * Start the timer
@@ -79,28 +59,12 @@ export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerPro
       </View>
       <View style={styles.buttonsContainer}>
         <Pressable onPress={() => startTimer()}>
-          <Svg
-            viewBox="0 0 384 512"
-            style={
-              buttonHover.start
-                ? { ...styles.buttonIcons, ...styles.buttonIconsHover }
-                : styles.buttonIcons
-            }
-            onPointerEnter={() => handleMouseEnter('start')}
-            onPointerLeave={() => handleMouseLeave('start')}>
+          <Svg viewBox="0 0 384 512" fill="white" style={styles.buttonIcons}>
             <Path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" />
           </Svg>
         </Pressable>
         <Pressable onPress={() => stopTimer()}>
-          <Svg
-            viewBox="0 0 320 512"
-            style={
-              buttonHover.stop
-                ? { ...styles.buttonIcons, ...styles.buttonIconsHover }
-                : styles.buttonIcons
-            }
-            onPointerEnter={() => handleMouseEnter('stop')}
-            onPointerLeave={() => handleMouseLeave('stop')}>
+          <Svg viewBox="0 0 320 512" fill="white" style={styles.buttonIcons}>
             <Path d="M48 64C21.5 64 0 85.5 0 112L0 400c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48L48 64zm192 0c-26.5 0-48 21.5-48 48l0 288c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48l-32 0z" />
           </Svg>
         </Pressable>
@@ -139,7 +103,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    boxShadow: '0px 0px 9px rgba(0, 0, 0, 0.5)',
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 9,
   },
   circleBackground: {
     justifyContent: 'center',
@@ -164,10 +131,5 @@ const styles = StyleSheet.create({
   buttonIcons: {
     height: 100,
     width: 100,
-    fill: 'white',
-    filter: 'drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.5))',
-  },
-  buttonIconsHover: {
-    filter: 'drop-shadow(0px 0px 9px rgba(0, 0, 0, 0.5))',
   },
 });

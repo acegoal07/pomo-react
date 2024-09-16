@@ -28,7 +28,7 @@ export default function Pomo() {
    * Get the window dimensions
    */
   React.useEffect(() => {
-    if (windowDimensions.width < 600) {
+    if (windowDimensions.width < 1400) {
       setPageLayout(false);
     } else {
       setPageLayout(true);
@@ -46,11 +46,7 @@ export default function Pomo() {
       </View>
       <UtilityBelt counter={counter} setCounter={setCounter} />
       <View
-        style={[
-          styles.componentsContainer,
-          pageLayout ? styles.rowLayout : styles.columnLayout,
-        ]}
-      >
+        style={[styles.componentsContainer, pageLayout ? styles.rowLayout : styles.columnLayout]}>
         <Timer pomoCounter={pomoCount} setPomoCounter={setPomoCount} />
         <Todos todoList={todoList} setTodoList={setTodoList} />
       </View>
@@ -80,13 +76,18 @@ const styles = StyleSheet.create({
   componentsContainer: {
     justifyContent: 'center',
     marginTop: 20,
+    width: '80%',
+    alignSelf: 'center',
   },
   rowLayout: {
     flexDirection: 'row',
-    gap:20,
+    gap: 200,
+    marginLeft: 80,
+    marginRight: 80,
   },
   columnLayout: {
     flexDirection: 'column',
-    gap: 20,
+    gap: 30,
+    width: '100%',
   },
 });

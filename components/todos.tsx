@@ -78,7 +78,7 @@ export default function Todos({ todoList, setTodoList }: Readonly<TodosProps>) {
         onPointerEnter={() => handleMouseEnter('add')}
         onPointerLeave={() => handleMouseLeave('add')}
         onPress={handleAddTodoPress}>
-        <Svg viewBox="0 0 448 512" style={styles.addTodoButtonText}>
+        <Svg viewBox="0 0 448 512" style={styles.addTodoButtonText} fill="white">
           <Path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />
         </Svg>
       </Pressable>
@@ -94,7 +94,10 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     maxHeight: 600,
-    boxShadow: '0px 0px 9px rgba(0, 0, 0, 0.5)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 9,
   },
   title: {
     fontSize: 60,
@@ -109,15 +112,20 @@ const styles = StyleSheet.create({
     backgroundColor: accentColor,
     padding: 10,
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
     marginBottom: 20,
     width: 50,
-    boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
   },
   addTodoButtonHover: {
-    boxShadow: '0px 0px 9px rgba(0, 0, 0, 0.5)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 9,
   },
   addTodoButtonText: {
-    fill: 'white',
     width: 30,
     height: 30,
   },
@@ -130,7 +138,10 @@ const styles = StyleSheet.create({
     backgroundColor: accentColor,
     padding: 15,
     borderRadius: 10,
-    boxShadow: '0px 0px 9px rgba(0, 0, 0, 0.5)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 9,
   },
   todoItemText: {
     color: 'white',
