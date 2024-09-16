@@ -10,7 +10,7 @@ import Todos from '~/components/todos';
 export default function Pomo() {
   const [pomoCount, setPomoCount] = React.useState(0);
   const [counter, setCounter] = React.useState(0);
-  const [pageLayout, setPageLayout] = React.useState(true);
+  const [pageLayout, setPageLayout] = React.useState(window.innerWidth > 1400);
   const [todoList, setTodoList] = React.useState<{ id: number; todo: string }[]>([]);
 
   /**
