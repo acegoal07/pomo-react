@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Image, useWindowDimensions, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  useWindowDimensions,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 
 import UtilityBelt from '../components/utilitybelt';
 import { backgroundColor } from '../constants/colours';
@@ -36,7 +43,7 @@ export default function Pomo() {
   }, [windowDimensions.width]);
 
   return (
-    <View style={styles.bodyContainer}>
+    <ScrollView contentContainerStyle={styles.bodyContainer}>
       <View style={styles.logoContainer}>
         <Image
           style={styles.logo}
@@ -45,24 +52,21 @@ export default function Pomo() {
         />
       </View>
       <UtilityBelt counter={counter} setCounter={setCounter} />
-      <ScrollView
-        contentContainerStyle={[
-          styles.componentsContainer,
-          pageLayout ? styles.rowLayout : styles.columnLayout,
-        ]}>
+      <SafeAreaView
+        style={[styles.componentsContainer, pageLayout ? styles.rowLayout : styles.columnLayout]}>
         <Timer pomoCounter={pomoCount} setPomoCounter={setPomoCount} />
         <Todos todoList={todoList} setTodoList={setTodoList} />
-      </ScrollView>
-    </View>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   bodyContainer: {
     backgroundColor,
-    flex: 1,
     padding: 20,
     paddingTop: 10,
+    flexGrow: 1,
   },
   logoContainer: {
     maxHeight: 170,
@@ -79,6 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
     alignSelf: 'center',
+    flexShrink: 1,
   },
   rowLayout: {
     flexDirection: 'row',
