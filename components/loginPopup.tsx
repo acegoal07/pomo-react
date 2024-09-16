@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 5,
     borderColor: accentColor,
+    width: '50%',
   },
   modalTitle: {
     fontSize: 24,
