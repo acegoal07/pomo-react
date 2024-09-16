@@ -46,7 +46,10 @@ export default function Pomo() {
       </View>
       <UtilityBelt counter={counter} setCounter={setCounter} />
       <ScrollView
-        contentContainerStyle={[styles.componentsContainer, pageLayout ? styles.rowLayout : styles.columnLayout]}>
+        contentContainerStyle={[
+          styles.componentsContainer,
+          pageLayout ? styles.rowLayout : styles.columnLayout,
+        ]}>
         <Timer pomoCounter={pomoCount} setPomoCounter={setPomoCount} />
         <Todos todoList={todoList} setTodoList={setTodoList} />
       </ScrollView>
@@ -60,7 +63,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 10,
-    overflow: 'scroll',
   },
   logoContainer: {
     maxHeight: 170,
