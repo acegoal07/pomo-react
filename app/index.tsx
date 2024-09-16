@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
   componentsContainer: {
     justifyContent: 'center',
     marginTop: 20,
-    width: '80%',
     alignSelf: 'center',
   },
   rowLayout: {
@@ -84,6 +83,7 @@ const styles = StyleSheet.create({
     gap: 200,
     marginLeft: 80,
     marginRight: 80,
+    width: '80%',
   },
   columnLayout: {
     flexDirection: 'column',
