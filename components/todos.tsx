@@ -48,7 +48,7 @@ export default function Todos({ todoList, setTodoList }: Readonly<TodosProps>) {
 
   /**
    * Render the todo item
-   * @param {id: number, todo: string }[]} item The todo item to render
+   * @param {ListRenderItemInfo<{ id: number, todo: string }>} info The todo item info to render
    * @returns {JSX.Element} The JSX element for the todo item
    */
   function renderTodoItem({ item }: { item: { id: number; todo: string } }): JSX.Element {
