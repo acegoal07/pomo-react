@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, Image, useWindowDimensions, ScrollView } from 'react-native';
 
 import UtilityBelt from '../components/utilitybelt';
 import { backgroundColor } from '../constants/colours';
@@ -45,11 +45,11 @@ export default function Pomo() {
         />
       </View>
       <UtilityBelt counter={counter} setCounter={setCounter} />
-      <View
-        style={[styles.componentsContainer, pageLayout ? styles.rowLayout : styles.columnLayout]}>
+      <ScrollView
+        contentContainerStyle={[styles.componentsContainer, pageLayout ? styles.rowLayout : styles.columnLayout]}>
         <Timer pomoCounter={pomoCount} setPomoCounter={setPomoCount} />
         <Todos todoList={todoList} setTodoList={setTodoList} />
-      </View>
+      </ScrollView>
     </View>
   );
 }
