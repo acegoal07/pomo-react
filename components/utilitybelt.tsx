@@ -43,9 +43,7 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
    */
   const [leaderboardPopupVisible, setLeaderboardPopupVisible] = React.useState(false);
   function handleLeaderBoardPress() {
-    console.log('Leaderboard pressed');
     setLeaderboardPopupVisible(true);
-   
   }
 
   /**
@@ -54,11 +52,7 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
 
   const [loginPopupVisible, setLoginPopupVisible] = React.useState(false);
   function handleLoginPress() {
-    console.log('Login pressed');
     setLoginPopupVisible(true);
-  
-
-
   }
 
   /**
@@ -66,7 +60,6 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
    */
   const [informationPopupVisible, setInformationPopupVisible] = React.useState(false);
   function handleInformationPress() {
-    console.log('Information pressed');
     setInformationPopupVisible(true);
   }
 

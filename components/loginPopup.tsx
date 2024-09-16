@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, Modal, StyleSheet, TextInput } from 'react-native';
-import { backgroundColor , accentColor} from '~/constants/colours';
+
+import { backgroundColor, accentColor } from '~/constants/colours';
 
 interface LoginPopupProps {
   visible: boolean;
   onClose: () => void;
 }
 
-export default function LoginPopup({ visible, onClose }: LoginPopupProps) {
+export default function LoginPopup({ visible, onClose }: Readonly<LoginPopupProps>) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,7 +20,7 @@ export default function LoginPopup({ visible, onClose }: LoginPopupProps) {
   };
 
   return (
-    <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={onClose}>
+    <Modal animationType="fade" transparent visible={visible} onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Login</Text>
@@ -45,8 +46,6 @@ export default function LoginPopup({ visible, onClose }: LoginPopupProps) {
               <Text style={styles.submitText}>Submit</Text>
             </Pressable>
           </View>
-
-         
         </View>
       </View>
     </Modal>
@@ -59,14 +58,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backdropFilter: 'blur(10px)',
   },
   modalContent: {
     width: '80%',
+    height: '80%',
     padding: 20,
-    backgroundColor: backgroundColor,
+    backgroundColor,
     borderRadius: 10,
     alignItems: 'center',
     position: 'relative',
+    border: `5px solid ${accentColor}`,
   },
   modalTitle: {
     fontSize: 24,
@@ -81,7 +83,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 20,
-
   },
   closeButtonText: {
     color: 'white',

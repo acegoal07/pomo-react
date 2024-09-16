@@ -8,9 +8,9 @@ interface LeaderboardPopupProps {
   onClose: () => void;
 }
 
-export default function LeaderboardPopup({ visible, onClose }: LeaderboardPopupProps) {
+export default function LeaderboardPopup({ visible, onClose }: Readonly<LeaderboardPopupProps>) {
   return (
-    <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={onClose}>
+    <Modal animationType="fade" transparent visible={visible} onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Leaderboard</Text>
@@ -29,14 +29,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backdropFilter: 'blur(10px)',
   },
   modalContent: {
     width: '80%',
+    height: '80%',
     padding: 20,
-    backgroundColor: backgroundColor,
+    backgroundColor,
     borderRadius: 10,
     alignItems: 'center',
-    position : 'relative',
+    position: 'relative',
+    border: `5px solid ${accentColor}`,
   },
   modalTitle: {
     fontSize: 24,
