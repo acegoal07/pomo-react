@@ -6,10 +6,10 @@ import { backgroundColor, foregroundColor } from '~/constants/colours';
 
 interface TimerProps {
   pomoCounter: number;
-  setPomoCounter: React.Dispatch<React.SetStateAction<number>>;
+  setPartialPomoScore: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerProps>) {
+export default function Timer({ pomoCounter, setPartialPomoScore }: Readonly<TimerProps>) {
   const breakTime = 5 * 60000;
   const workTime = 25 * 60000;
   const timeOutput = React.useRef<number>(workTime);
@@ -34,7 +34,7 @@ export default function Timer({ pomoCounter, setPomoCounter }: Readonly<TimerPro
     intervalID.current = setInterval(() => {
       if (intervalID.current) {
         if (timeOutput.current <= 0) {
-          setPomoCounter((prev) => prev + 1);
+          setPartialPomoScore((prev) => prev + 1);
           stopTimer();
         } else {
           timeOutput.current = timeOutput.current - 1000;

@@ -1,17 +1,26 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 
+import LoginPopup from './accountPopup';
 import InformationPopup from './informationPopup';
 import LeaderboardPopup from './leaderboardPopup';
-import LoginPopup from './loginPopup';
 import { accentColor } from '../constants/colours';
 
 interface UtilityBeltProps {
-  counter: number;
-  setCounter: React.Dispatch<React.SetStateAction<number>>;
+  fullPomoScore: number;
+  setFullPomoScore: React.Dispatch<React.SetStateAction<number>>;
+  setPartialPomoScore: React.Dispatch<React.SetStateAction<number>>;
+  user: { username: string; secureID: string };
+  setUser: React.Dispatch<React.SetStateAction<{ username: string; secureID: string }>>;
 }
 
-export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBeltProps>) {
+export default function UtilityBelt({
+  fullPomoScore,
+  setFullPomoScore,
+  setPartialPomoScore,
+  user,
+  setUser,
+}: Readonly<UtilityBeltProps>) {
   const [buttonHover, setButtonHover] = React.useState<{
     leaderboard: boolean;
     login: boolean;
@@ -49,10 +58,14 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
   /**
    * Handle the press event for the login icon
    */
-
-  const [loginPopupVisible, setLoginPopupVisible] = React.useState(false);
-  function handleLoginPress() {
-    setLoginPopupVisible(true);
+  const [accountPopupInfoView, setAccountPopupInfoView] = React.useState(false);
+  const [accountPopupLoginView, setAccountPopupLoginView] = React.useState(false);
+  function handleAccountPress() {
+    if (user.username === '' && user.secureID === '') {
+      setAccountPopupLoginView(true);
+    } else {
+      setAccountPopupInfoView(true);
+    }
   }
 
   /**
@@ -76,14 +89,14 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
         onPress={handleLeaderBoardPress}>
         <Image style={styles.icons} source={require('../assets/images/leaderboardIcon.webp')} />
       </Pressable>
-      <Text style={styles.counter}>{counter}</Text>
+      <Text style={styles.counter}>{fullPomoScore}</Text>
       <Pressable
         style={
           buttonHover.login ? { ...styles.iconShadow, ...styles.iconHover } : styles.iconShadow
         }
         onPointerEnter={() => handleMouseEnter('login')}
         onPointerLeave={() => handleMouseLeave('login')}
-        onPress={handleLoginPress}>
+        onPress={handleAccountPress}>
         <Image
           style={styles.icons}
           resizeMode="contain"
@@ -105,7 +118,16 @@ export default function UtilityBelt({ counter, setCounter }: Readonly<UtilityBel
           source={require('../assets/images/informationIcon.webp')}
         />
       </Pressable>
-      <LoginPopup visible={loginPopupVisible} onClose={() => setLoginPopupVisible(false)} />
+      <LoginPopup
+        loginVisible={accountPopupLoginView}
+        loginOnClose={() => setAccountPopupLoginView(false)}
+        infoVisible={accountPopupInfoView}
+        infoOnClose={() => setAccountPopupInfoView(false)}
+        user={user}
+        setUser={setUser}
+        setFullPomoScore={setFullPomoScore}
+        setPartialPomoScore={setPartialPomoScore}
+      />
       <LeaderboardPopup
         visible={leaderboardPopupVisible}
         onClose={() => setLeaderboardPopupVisible(false)}

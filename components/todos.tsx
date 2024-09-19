@@ -3,14 +3,16 @@ import { Text, StyleSheet, View, Pressable, FlatList } from 'react-native';
 import CheckBox from 'react-native-bouncy-checkbox';
 import { Svg, Path } from 'react-native-svg';
 
+import { deleteTodo } from '~/constants/apiMiddleMan';
 import { accentColor, foregroundColor } from '~/constants/colours';
 
 interface TodosProps {
-  todoList: { id: number; todo: string }[];
-  setTodoList: React.Dispatch<React.SetStateAction<{ id: number; todo: string }[]>>;
+  todoList: { taskID: number; taskContent: string }[];
+  setTodoList: React.Dispatch<React.SetStateAction<{ taskID: number; taskContent: string }[]>>;
+  user: { username: string; secureID: string };
 }
 
-export default function Todos({ todoList, setTodoList }: Readonly<TodosProps>) {
+export default function Todos({ todoList, setTodoList, user }: Readonly<TodosProps>) {
   const [buttonHover, setButtonHover] = React.useState<{ add: boolean }>({
     add: false,
   });
@@ -40,18 +42,28 @@ export default function Todos({ todoList, setTodoList }: Readonly<TodosProps>) {
 
   /**
    * Handle the press event for the delete todo button
-   * @param {{id: number, todo: string}} item The todo item to delete
+   * @param {{taskID: number; taskContent: string}} item The todo item to delete
    */
-  function handleDeleteTodoPress(item: { id: number; todo: string }) {
-    console.log('Delete todo pressed');
+  function handleDeleteTodoPress(item: { taskID: number; taskContent: string }) {
+    console.log(item);
+    deleteTodo(user.username, user.secureID, item.taskID).then((response) => {
+      if (response.success) {
+        setTodoList((prev) => prev.filter((todo) => todo.taskID !== item.taskID));
+      }
+    });
   }
 
   /**
    * Render the todo item
-   * @param {ListRenderItemInfo<{ id: number, todo: string }>} info The todo item info to render
+   * @param {ListRenderItemInfo<{ taskID: number, taskContent: string }>} info The todo item info to render
    * @returns {JSX.Element} The JSX element for the todo item
    */
-  function renderTodoItem({ item }: { item: { id: number; todo: string } }): JSX.Element {
+  function renderTodoItem({
+    item,
+  }: {
+    item: { taskID: number; taskContent: string };
+  }): JSX.Element {
+    console.log(item);
     return (
       <View style={styles.todoItem}>
         <View style={styles.checkBoxContainer}>
@@ -63,7 +75,7 @@ export default function Todos({ todoList, setTodoList }: Readonly<TodosProps>) {
             onPress={() => handleDeleteTodoPress(item)}
           />
         </View>
-        <Text style={styles.todoItemText}>{item.todo}</Text>
+        <Text style={styles.todoItemText}>{item.taskContent}</Text>
       </View>
     );
   }

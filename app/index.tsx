@@ -13,23 +13,25 @@ import { backgroundColor } from '../constants/colours';
 
 import Timer from '~/components/timer';
 import Todos from '~/components/todos';
+import { getPomoScore, getTodos } from '~/constants/apiMiddleMan';
 
 export default function Pomo() {
-  const [pomoCount, setPomoCount] = React.useState(0);
-  const [counter, setCounter] = React.useState(0);
+  const [partialPomoScore, setPartialPomoScore] = React.useState(0);
+  const [fullPomoScore, setFullPomoScore] = React.useState(0);
   const [pageLayout, setPageLayout] = React.useState(true);
-  const [todoList, setTodoList] = React.useState<{ id: number; todo: string }[]>([]);
+  const [todoList, setTodoList] = React.useState<{ taskID: number; taskContent: string }[]>([]);
+  const [user, setUser] = React.useState({ username: '', secureID: '' });
   const windowDimensions = useWindowDimensions();
 
   /**
    * Reset the pomo count and increment the counter when the pomo count reaches 8
    */
   React.useEffect(() => {
-    if (pomoCount === 8) {
-      setPomoCount(0);
-      setCounter((prev) => prev + 1);
+    if (partialPomoScore === 8) {
+      setPartialPomoScore(0);
+      setFullPomoScore((prev) => prev + 1);
     }
-  }, [pomoCount]);
+  }, [partialPomoScore]);
 
   /**
    * Get the window dimensions
@@ -42,6 +44,37 @@ export default function Pomo() {
     }
   }, [windowDimensions.width]);
 
+  /**
+   * Get the user's username and secureID from the local storage
+   */
+  React.useEffect(() => {
+    const username = localStorage.getItem('username');
+    const secureID = localStorage.getItem('secureID');
+    if (username && secureID) {
+      setUser({ username, secureID });
+      getPomoScore(username, secureID).then((response) => {
+        if (response.success) {
+          setFullPomoScore(response.fullPomoScore);
+          setPartialPomoScore(response.partialPomoScore);
+        }
+      });
+    }
+  }, []);
+
+  /**
+   * Get the user's todos from the database when the user changes
+   */
+  React.useEffect(() => {
+    if (user.username && user.secureID) {
+      getTodos(user.username, user.secureID).then((response) => {
+        if (response.success) {
+          console.log(response.todos);
+          setTodoList(response.todos);
+        }
+      });
+    }
+  }, [user]);
+
   return (
     <ScrollView contentContainerStyle={styles.bodyContainer}>
       <View style={styles.logoContainer}>
@@ -51,11 +84,17 @@ export default function Pomo() {
           source={require('../assets/images/pomoLogo.webp')}
         />
       </View>
-      <UtilityBelt counter={counter} setCounter={setCounter} />
+      <UtilityBelt
+        fullPomoScore={fullPomoScore}
+        setFullPomoScore={setFullPomoScore}
+        setPartialPomoScore={setPartialPomoScore}
+        user={user}
+        setUser={setUser}
+      />
       <SafeAreaView
         style={[styles.componentsContainer, pageLayout ? styles.rowLayout : styles.columnLayout]}>
-        <Timer pomoCounter={pomoCount} setPomoCounter={setPomoCount} />
-        <Todos todoList={todoList} setTodoList={setTodoList} />
+        <Timer pomoCounter={partialPomoScore} setPartialPomoScore={setPartialPomoScore} />
+        <Todos todoList={todoList} setTodoList={setTodoList} user={user} />
       </SafeAreaView>
     </ScrollView>
   );
