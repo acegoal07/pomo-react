@@ -4,12 +4,13 @@ import { Svg, Path } from 'react-native-svg';
 
 import { backgroundColor, accentColor } from '~/constants/colours';
 
-interface LeaderboardPopupProps {
+export default function LeaderboardPopup({
+  visible,
+  onClose,
+}: Readonly<{
   visible: boolean;
   onClose: () => void;
-}
-
-export default function LeaderboardPopup({ visible, onClose }: Readonly<LeaderboardPopupProps>) {
+}>) {
   const [buttonHover, setButtonHover] = React.useState<{
     closeButton: boolean;
   }>({

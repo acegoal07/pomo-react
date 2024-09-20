@@ -6,21 +6,21 @@ import InformationPopup from './informationPopup';
 import LeaderboardPopup from './leaderboardPopup';
 import { accentColor } from '../constants/colours';
 
-interface UtilityBeltProps {
-  fullPomoScore: number;
-  setFullPomoScore: React.Dispatch<React.SetStateAction<number>>;
-  setPartialPomoScore: React.Dispatch<React.SetStateAction<number>>;
-  user: { username: string; secureID: string };
-  setUser: React.Dispatch<React.SetStateAction<{ username: string; secureID: string }>>;
-}
-
 export default function UtilityBelt({
   fullPomoScore,
   setFullPomoScore,
+  partialPomoScore,
   setPartialPomoScore,
   user,
   setUser,
-}: Readonly<UtilityBeltProps>) {
+}: Readonly<{
+  fullPomoScore: number;
+  setFullPomoScore: React.Dispatch<React.SetStateAction<number>>;
+  partialPomoScore: number;
+  setPartialPomoScore: React.Dispatch<React.SetStateAction<number>>;
+  user: { username: string; secureID: string };
+  setUser: React.Dispatch<React.SetStateAction<{ username: string; secureID: string }>>;
+}>) {
   const [buttonHover, setButtonHover] = React.useState<{
     leaderboard: boolean;
     login: boolean;
@@ -59,7 +59,6 @@ export default function UtilityBelt({
    * Handle the press event for the login icon
    */
   const [accountPopupInfoView, setAccountPopupInfoView] = React.useState(false);
-  const [accountPopupRegisterView, setAccountPopupRegisterView] = React.useState(false);
   const [accountPopupChangePasswordView, setAccountPopupChangePasswordView] = React.useState(false);
   const [accountPopupLoginView, setAccountPopupLoginView] = React.useState(false);
   function handleAccountPress() {
@@ -91,7 +90,10 @@ export default function UtilityBelt({
         onPress={handleLeaderBoardPress}>
         <Image style={styles.icons} source={require('../assets/images/leaderboardIcon.webp')} />
       </Pressable>
-      <Text style={styles.counter}>{fullPomoScore}</Text>
+      <View style={styles.counterContainer}>
+        <Text style={styles.fullCounter}>{fullPomoScore}</Text>
+        <Text style={styles.partialCounter}>{partialPomoScore}</Text>
+      </View>
       <Pressable
         style={
           buttonHover.login ? { ...styles.iconShadow, ...styles.iconHover } : styles.iconShadow
@@ -176,12 +178,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 9,
   },
-  counter: {
+  counterContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  fullCounter: {
     fontSize: 60,
     fontWeight: 'bold',
     color: accentColor,
     alignSelf: 'center',
-    paddingLeft: 10,
-    paddingRight: 10,
+  },
+  partialCounter: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: accentColor,
   },
 });

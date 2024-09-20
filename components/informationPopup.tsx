@@ -4,12 +4,13 @@ import { Svg, Path } from 'react-native-svg';
 
 import { backgroundColor, accentColor } from '~/constants/colours';
 
-interface InformationPopupProps {
+export default function IInformationPopup({
+  visible,
+  onClose,
+}: Readonly<{
   visible: boolean;
   onClose: () => void;
-}
-
-export default function IInformationPopup({ visible, onClose }: Readonly<InformationPopupProps>) {
+}>) {
   const [buttonHover, setButtonHover] = React.useState<{
     closeButton: boolean;
   }>({

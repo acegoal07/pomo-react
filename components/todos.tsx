@@ -6,13 +6,15 @@ import { Svg, Path } from 'react-native-svg';
 import { deleteTodo } from '~/constants/apiMiddleMan';
 import { accentColor, foregroundColor } from '~/constants/colours';
 
-interface TodosProps {
+export default function Todos({
+  todoList,
+  setTodoList,
+  user,
+}: Readonly<{
   todoList: { taskID: number; taskContent: string }[];
   setTodoList: React.Dispatch<React.SetStateAction<{ taskID: number; taskContent: string }[]>>;
   user: { username: string; secureID: string };
-}
-
-export default function Todos({ todoList, setTodoList, user }: Readonly<TodosProps>) {
+}>) {
   const [buttonHover, setButtonHover] = React.useState<{ add: boolean }>({
     add: false,
   });

@@ -4,15 +4,17 @@ import { Path, Svg } from 'react-native-svg';
 
 import { backgroundColor, foregroundColor } from '~/constants/colours';
 
-interface TimerProps {
-  pomoCounter: number;
+export default function Timer({
+  setPartialPomoScore,
+  user,
+}: Readonly<{
   setPartialPomoScore: React.Dispatch<React.SetStateAction<number>>;
-}
-
-export default function Timer({ pomoCounter, setPartialPomoScore }: Readonly<TimerProps>) {
+  user: { username: string; secureID: string };
+}>) {
   const breakTime = 5 * 60000;
   const workTime = 25 * 60000;
   const timeOutput = React.useRef<number>(workTime);
+  const [orderPosition, setOrderPosition] = React.useState(0);
   const [counter, setCounter] = React.useState('25:00');
   const intervalID = React.useRef<NodeJS.Timeout | null>(null);
 
@@ -24,7 +26,7 @@ export default function Timer({ pomoCounter, setPartialPomoScore }: Readonly<Tim
       return;
     }
     if (timeOutput.current === 0) {
-      if (pomoCounter % 2 !== 0) {
+      if (orderPosition % 2 !== 0) {
         timeOutput.current = breakTime;
       } else {
         timeOutput.current = workTime;
@@ -34,6 +36,7 @@ export default function Timer({ pomoCounter, setPartialPomoScore }: Readonly<Tim
     intervalID.current = setInterval(() => {
       if (intervalID.current) {
         if (timeOutput.current <= 0) {
+          setOrderPosition((prev) => prev + 1);
           setPartialPomoScore((prev) => prev + 1);
           stopTimer();
         } else {
@@ -43,6 +46,15 @@ export default function Timer({ pomoCounter, setPartialPomoScore }: Readonly<Tim
       }
     }, 1000);
   }
+
+  /**
+   * Stop the timer and reset the counter if the user changes
+   */
+  React.useEffect(() => {
+    stopTimer();
+    setOrderPosition(0);
+    setCounter('25:00');
+  }, [user]);
 
   /**
    * Stop the timer

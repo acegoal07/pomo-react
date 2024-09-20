@@ -87,13 +87,14 @@ export default function Pomo() {
       <UtilityBelt
         fullPomoScore={fullPomoScore}
         setFullPomoScore={setFullPomoScore}
+        partialPomoScore={partialPomoScore}
         setPartialPomoScore={setPartialPomoScore}
         user={user}
         setUser={setUser}
       />
       <SafeAreaView
         style={[styles.componentsContainer, pageLayout ? styles.rowLayout : styles.columnLayout]}>
-        <Timer pomoCounter={partialPomoScore} setPartialPomoScore={setPartialPomoScore} />
+        <Timer setPartialPomoScore={setPartialPomoScore} user={user} />
         <Todos todoList={todoList} setTodoList={setTodoList} user={user} />
       </SafeAreaView>
     </ScrollView>

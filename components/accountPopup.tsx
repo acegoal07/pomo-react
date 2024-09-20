@@ -5,22 +5,6 @@ import { Svg, Path } from 'react-native-svg';
 import { changePassword, login } from '~/constants/apiMiddleMan';
 import { backgroundColor, accentColor } from '~/constants/colours';
 
-interface LoginPopupProps {
-  loginVisible: boolean;
-  loginOnClose: () => void;
-  loginOnShow: () => void;
-  infoVisible: boolean;
-  infoOnClose: () => void;
-  infoOnShow: () => void;
-  changePasswordVisible: boolean;
-  changePasswordOnClose: () => void;
-  changePasswordOnShow: () => void;
-  user: { username: string; secureID: string };
-  setUser: React.Dispatch<React.SetStateAction<{ username: string; secureID: string }>>;
-  setFullPomoScore: React.Dispatch<React.SetStateAction<number>>;
-  setPartialPomoScore: React.Dispatch<React.SetStateAction<number>>;
-}
-
 export default function LoginPopup({
   loginVisible,
   loginOnClose,
@@ -35,7 +19,21 @@ export default function LoginPopup({
   setUser,
   setFullPomoScore,
   setPartialPomoScore,
-}: Readonly<LoginPopupProps>) {
+}: Readonly<{
+  loginVisible: boolean;
+  loginOnClose: () => void;
+  loginOnShow: () => void;
+  infoVisible: boolean;
+  infoOnClose: () => void;
+  infoOnShow: () => void;
+  changePasswordVisible: boolean;
+  changePasswordOnClose: () => void;
+  changePasswordOnShow: () => void;
+  user: { username: string; secureID: string };
+  setUser: React.Dispatch<React.SetStateAction<{ username: string; secureID: string }>>;
+  setFullPomoScore: React.Dispatch<React.SetStateAction<number>>;
+  setPartialPomoScore: React.Dispatch<React.SetStateAction<number>>;
+}>) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [buttonHover, setButtonHover] = React.useState<{
@@ -155,11 +153,6 @@ export default function LoginPopup({
     ).then((response) => {
       if (response.success) {
         handleChangePasswordClose();
-        setUser({ username: '', secureID: '' });
-        setFullPomoScore(0);
-        setPartialPomoScore(0);
-        localStorage.removeItem('username');
-        localStorage.removeItem('secureID');
         setChangePasswordOld('');
         setChangePasswordNew('');
         setChangePasswordConfirm('');
