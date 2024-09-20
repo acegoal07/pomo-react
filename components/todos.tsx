@@ -38,20 +38,20 @@ export default function Todos({
     setButtonHover({ ...buttonHover, [button]: false });
   }
 
+  const [addTodoPopupVisible, setAddTodoPopupVisible] = React.useState(false);
   /**
    * Handle the press event for the add todo button
    */
-  const [addTodoPopupVisible, setAddTodoPopupVisible] = React.useState(false);
   function handleAddTodoPress() {
     setAddTodoPopupVisible(true);
   }
 
-  /**
-   * Handle the press event for the edit todo button
-   */
   const [editTodoPopupVisible, setEditTodoPopupVisible] = React.useState(false);
   const [editTaskId, setEditTaskId] = React.useState(0);
   const [editTaskContent, setEditTaskContent] = React.useState('');
+  /**
+   * Handle the press event for the edit todo button
+   */
   function handleEditTodoPress(item: { taskID: number; taskContent: string }) {
     setEditTaskId(item.taskID);
     setEditTaskContent(item.taskContent);

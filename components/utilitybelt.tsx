@@ -47,20 +47,20 @@ export default function UtilityBelt({
     setButtonHover({ ...buttonHover, [button]: false });
   }
 
+  const [leaderboardPopupVisible, setLeaderboardPopupVisible] = React.useState(false);
   /**
    * Handle the press event for the leaderboard icon
    */
-  const [leaderboardPopupVisible, setLeaderboardPopupVisible] = React.useState(false);
   function handleLeaderBoardPress() {
     setLeaderboardPopupVisible(true);
   }
 
-  /**
-   * Handle the press event for the login icon
-   */
   const [accountPopupInfoView, setAccountPopupInfoView] = React.useState(false);
   const [accountPopupChangePasswordView, setAccountPopupChangePasswordView] = React.useState(false);
   const [accountPopupLoginView, setAccountPopupLoginView] = React.useState(false);
+  /**
+   * Handle the press event for the login icon
+   */
   function handleAccountPress() {
     if (user.username === '' && user.secureID === '') {
       setAccountPopupLoginView(true);
@@ -69,10 +69,10 @@ export default function UtilityBelt({
     }
   }
 
+  const [informationPopupVisible, setInformationPopupVisible] = React.useState(false);
   /**
    * Handle the press event for the information icon
    */
-  const [informationPopupVisible, setInformationPopupVisible] = React.useState(false);
   function handleInformationPress() {
     setInformationPopupVisible(true);
   }
