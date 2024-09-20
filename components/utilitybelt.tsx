@@ -59,6 +59,8 @@ export default function UtilityBelt({
    * Handle the press event for the login icon
    */
   const [accountPopupInfoView, setAccountPopupInfoView] = React.useState(false);
+  const [accountPopupRegisterView, setAccountPopupRegisterView] = React.useState(false);
+  const [accountPopupChangePasswordView, setAccountPopupChangePasswordView] = React.useState(false);
   const [accountPopupLoginView, setAccountPopupLoginView] = React.useState(false);
   function handleAccountPress() {
     if (user.username === '' && user.secureID === '') {
@@ -121,8 +123,13 @@ export default function UtilityBelt({
       <LoginPopup
         loginVisible={accountPopupLoginView}
         loginOnClose={() => setAccountPopupLoginView(false)}
+        loginOnShow={() => setAccountPopupLoginView(true)}
         infoVisible={accountPopupInfoView}
         infoOnClose={() => setAccountPopupInfoView(false)}
+        infoOnShow={() => setAccountPopupInfoView(true)}
+        changePasswordVisible={accountPopupChangePasswordView}
+        changePasswordOnClose={() => setAccountPopupChangePasswordView(false)}
+        changePasswordOnShow={() => setAccountPopupChangePasswordView(true)}
         user={user}
         setUser={setUser}
         setFullPomoScore={setFullPomoScore}

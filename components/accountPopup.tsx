@@ -2,14 +2,19 @@ import React, { useState } from 'react';
 import { View, Text, Pressable, Modal, StyleSheet, TextInput } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 
-import { login } from '~/constants/apiMiddleMan';
+import { changePassword, login } from '~/constants/apiMiddleMan';
 import { backgroundColor, accentColor } from '~/constants/colours';
 
 interface LoginPopupProps {
   loginVisible: boolean;
   loginOnClose: () => void;
+  loginOnShow: () => void;
   infoVisible: boolean;
   infoOnClose: () => void;
+  infoOnShow: () => void;
+  changePasswordVisible: boolean;
+  changePasswordOnClose: () => void;
+  changePasswordOnShow: () => void;
   user: { username: string; secureID: string };
   setUser: React.Dispatch<React.SetStateAction<{ username: string; secureID: string }>>;
   setFullPomoScore: React.Dispatch<React.SetStateAction<number>>;
@@ -19,8 +24,13 @@ interface LoginPopupProps {
 export default function LoginPopup({
   loginVisible,
   loginOnClose,
+  loginOnShow,
   infoVisible,
   infoOnClose,
+  infoOnShow,
+  changePasswordVisible,
+  changePasswordOnClose,
+  changePasswordOnShow,
   user,
   setUser,
   setFullPomoScore,
@@ -31,12 +41,19 @@ export default function LoginPopup({
   const [buttonHover, setButtonHover] = React.useState<{
     loginSubmitButton: boolean;
     logoutSubmitButton: boolean;
+    changePasswordSubmitButton: boolean;
+    changeInfoPageButton: boolean;
     closeButton: boolean;
   }>({
     loginSubmitButton: false,
     logoutSubmitButton: false,
+    changePasswordSubmitButton: false,
+    changeInfoPageButton: false,
     closeButton: false,
   });
+  const [changePasswordOld, setChangePasswordOld] = React.useState('');
+  const [changePasswordNew, setChangePasswordNew] = React.useState('');
+  const [changePasswordConfirm, setChangePasswordConfirm] = React.useState('');
 
   /**
    * Handle the mouse entering the button and adds the hover effect
@@ -69,8 +86,6 @@ export default function LoginPopup({
    * Handle the login form submission.
    */
   function handleLogin() {
-    console.log('Username:', username);
-    console.log('Password:', password);
     login(username, password).then((response) => {
       if (response.success) {
         localStorage.setItem('username', username);
@@ -83,6 +98,8 @@ export default function LoginPopup({
         // Handle the error
       }
     });
+    setUsername('');
+    setPassword('');
   }
 
   /**
@@ -95,6 +112,62 @@ export default function LoginPopup({
     setFullPomoScore(0);
     setPartialPomoScore(0);
     infoOnClose();
+  }
+
+  /**
+   * Handle the switch account info view event.
+   */
+  function handleSwitchAccountInfoView() {
+    if (changePasswordVisible) {
+      setChangePasswordOld('');
+      setChangePasswordNew('');
+      setChangePasswordConfirm('');
+      infoOnShow();
+      changePasswordOnClose();
+    } else {
+      setUsername('');
+      setPassword('');
+      infoOnClose();
+      changePasswordOnShow();
+    }
+  }
+
+  /**
+   * Handle the change popup close event.
+   */
+  function handleChangePasswordClose() {
+    setChangePasswordOld('');
+    setChangePasswordNew('');
+    setChangePasswordConfirm('');
+    changePasswordOnClose();
+  }
+
+  /**
+   * Handle the change password event
+   */
+  function handleChangePassword() {
+    changePassword(
+      user.username,
+      user.secureID,
+      changePasswordOld,
+      changePasswordNew,
+      changePasswordConfirm
+    ).then((response) => {
+      if (response.success) {
+        handleChangePasswordClose();
+        setUser({ username: '', secureID: '' });
+        setFullPomoScore(0);
+        setPartialPomoScore(0);
+        localStorage.removeItem('username');
+        localStorage.removeItem('secureID');
+      } else {
+        // Handle the error
+      }
+    });
+    setChangePasswordOld('');
+    setChangePasswordNew('');
+    setChangePasswordConfirm('');
+    changePasswordOnClose();
   }
 
   return (
@@ -149,10 +222,11 @@ export default function LoginPopup({
           </View>
         </View>
       </Modal>
+
       <Modal animationType="fade" transparent visible={infoVisible} onRequestClose={infoOnClose}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Information</Text>
+            <Text style={styles.modalTitle}>Account Management</Text>
             <Pressable
               style={
                 buttonHover.closeButton
@@ -166,17 +240,100 @@ export default function LoginPopup({
                 <Path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
               </Svg>
             </Pressable>
+            <View style={styles.form}>
+              <Pressable
+                style={
+                  buttonHover.changeInfoPageButton
+                    ? { ...styles.submit, ...styles.submitButtonHover }
+                    : styles.submit
+                }
+                onPress={() => handleSwitchAccountInfoView()}
+                onPointerEnter={() => handleMouseEnter('changeInfoPageButton')}
+                onPointerLeave={() => handleMouseLeave('changeInfoPageButton')}>
+                <Text style={styles.submitText}>Change Password</Text>
+              </Pressable>
+              <Pressable
+                style={
+                  buttonHover.logoutSubmitButton
+                    ? { ...styles.submit, ...styles.submitButtonHover }
+                    : styles.submit
+                }
+                onPress={handleLogout}
+                onPointerEnter={() => handleMouseEnter('logoutSubmitButton')}
+                onPointerLeave={() => handleMouseLeave('logoutSubmitButton')}>
+                <Text style={styles.submitText}>Logout</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent
+        visible={changePasswordVisible}
+        onRequestClose={handleChangePasswordClose}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Change Password</Text>
             <Pressable
               style={
-                buttonHover.logoutSubmitButton
-                  ? { ...styles.submit, ...styles.submitButtonHover }
-                  : styles.submit
+                buttonHover.closeButton
+                  ? { ...styles.closeButton, ...styles.closeButtonHover }
+                  : styles.closeButton
               }
-              onPress={handleLogout}
-              onPointerEnter={() => handleMouseEnter('logoutSubmitButton')}
-              onPointerLeave={() => handleMouseLeave('logoutSubmitButton')}>
-              <Text style={styles.submitText}>Logout</Text>
+              onPointerEnter={() => handleMouseEnter('closeButton')}
+              onPointerLeave={() => handleMouseLeave('closeButton')}
+              onPress={handleChangePasswordClose}>
+              <Svg viewBox="0 0 384 512" style={styles.closeButtonText} fill="white">
+                <Path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+              </Svg>
             </Pressable>
+            <View style={styles.form}>
+              <Pressable
+                style={
+                  buttonHover.changeInfoPageButton
+                    ? { ...styles.submit, ...styles.submitButtonHover }
+                    : styles.submit
+                }
+                onPress={() => handleSwitchAccountInfoView()}
+                onPointerEnter={() => handleMouseEnter('changeInfoPageButton')}
+                onPointerLeave={() => handleMouseLeave('changeInfoPageButton')}>
+                <Text style={styles.submitText}>Back</Text>
+              </Pressable>
+              <TextInput
+                style={styles.input}
+                placeholder="Old Password"
+                value={changePasswordOld}
+                onChangeText={setChangePasswordOld}
+                secureTextEntry
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="New Password"
+                value={changePasswordNew}
+                onChangeText={setChangePasswordNew}
+                secureTextEntry
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Confirm Password"
+                value={changePasswordConfirm}
+                onChangeText={setChangePasswordConfirm}
+                secureTextEntry
+              />
+              <Pressable
+                style={
+                  buttonHover.changePasswordSubmitButton
+                    ? { ...styles.submit, ...styles.submitButtonHover }
+                    : styles.submit
+                }
+                onPress={() => handleChangePassword()}
+                onPointerEnter={() => handleMouseEnter('changePasswordSubmitButton')}
+                onPointerLeave={() => handleMouseLeave('changePasswordSubmitButton')}>
+                <Text style={styles.submitText}>Submit</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Modal>
