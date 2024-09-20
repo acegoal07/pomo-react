@@ -89,6 +89,7 @@ export default function AddTodoPopup({
             <TextInput
               style={styles.input}
               onChangeText={setTaskContent}
+              placeholder="Enter your task here..."
               value={taskContent}
               multiline
               numberOfLines={10}
