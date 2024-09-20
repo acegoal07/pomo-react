@@ -160,14 +160,14 @@ export default function LoginPopup({
         setPartialPomoScore(0);
         localStorage.removeItem('username');
         localStorage.removeItem('secureID');
+        setChangePasswordOld('');
+        setChangePasswordNew('');
+        setChangePasswordConfirm('');
+        changePasswordOnClose();
       } else {
         // Handle the error
       }
     });
-    setChangePasswordOld('');
-    setChangePasswordNew('');
-    setChangePasswordConfirm('');
-    changePasswordOnClose();
   }
 
   return (
