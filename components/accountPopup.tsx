@@ -75,9 +75,9 @@ export default function LoginPopup({
    * Reset the form and close the modal.
    */
   function handleLoginFormResetClose() {
+    loginOnClose();
     setUsername('');
     setPassword('');
-    loginOnClose();
   }
 
   /**
@@ -86,12 +86,12 @@ export default function LoginPopup({
   function handleLogin() {
     login(username, password).then((response) => {
       if (response.success) {
+        handleLoginFormResetClose();
         localStorage.setItem('username', username);
         localStorage.setItem('secureID', response.secureID);
         setUser({ username, secureID: response.secureID });
         setFullPomoScore(response.fullPomoScore);
         setPartialPomoScore(response.partialPomoScore);
-        handleLoginFormResetClose();
       } else {
         // Handle the error
       }
@@ -104,12 +104,12 @@ export default function LoginPopup({
    * Handle the logout event.
    */
   function handleLogout() {
+    infoOnClose();
     localStorage.removeItem('username');
     localStorage.removeItem('secureID');
     setUser({ username: '', secureID: '' });
     setFullPomoScore(0);
     setPartialPomoScore(0);
-    infoOnClose();
   }
 
   /**
@@ -117,16 +117,16 @@ export default function LoginPopup({
    */
   function handleSwitchAccountInfoView() {
     if (changePasswordVisible) {
+      infoOnShow();
+      changePasswordOnClose();
       setChangePasswordOld('');
       setChangePasswordNew('');
       setChangePasswordConfirm('');
-      infoOnShow();
-      changePasswordOnClose();
     } else {
-      setUsername('');
-      setPassword('');
       infoOnClose();
       changePasswordOnShow();
+      setUsername('');
+      setPassword('');
     }
   }
 
@@ -134,10 +134,10 @@ export default function LoginPopup({
    * Handle the change popup close event.
    */
   function handleChangePasswordClose() {
+    changePasswordOnClose();
     setChangePasswordOld('');
     setChangePasswordNew('');
     setChangePasswordConfirm('');
-    changePasswordOnClose();
   }
 
   /**
@@ -153,10 +153,6 @@ export default function LoginPopup({
     ).then((response) => {
       if (response.success) {
         handleChangePasswordClose();
-        setChangePasswordOld('');
-        setChangePasswordNew('');
-        setChangePasswordConfirm('');
-        changePasswordOnClose();
       } else {
         // Handle the error
       }
@@ -209,7 +205,7 @@ export default function LoginPopup({
                 onPress={handleLogin}
                 onPointerEnter={() => handleMouseEnter('loginSubmitButton')}
                 onPointerLeave={() => handleMouseLeave('loginSubmitButton')}>
-                <Text style={styles.submitText}>Submit</Text>
+                <Text style={styles.submitText}>Login</Text>
               </Pressable>
             </View>
           </View>

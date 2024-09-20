@@ -72,6 +72,8 @@ export default function Pomo() {
           setTodoList(response.todos);
         }
       });
+    } else if (user.username === '' && user.secureID === '') {
+      setTodoList([]);
     }
   }, [user]);
 
@@ -106,13 +108,14 @@ const styles = StyleSheet.create({
     backgroundColor,
     padding: 20,
     paddingTop: 10,
-    flexGrow: 1,
+    flex: 1,
+    overflow: 'scroll',
   },
   logoContainer: {
-    maxHeight: 170,
-    height: '100%',
-    maxWidth: 457,
-    width: '100%',
+    maxHeight: 150,
+    height: '80%',
+    maxWidth: 437,
+    width: '80%',
     alignSelf: 'center',
   },
   logo: {
@@ -123,7 +126,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
     alignSelf: 'center',
-    flexShrink: 1,
   },
   rowLayout: {
     flexDirection: 'row',

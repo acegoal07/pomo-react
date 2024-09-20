@@ -3,6 +3,8 @@ import { Text, StyleSheet, View, Pressable, FlatList } from 'react-native';
 import CheckBox from 'react-native-bouncy-checkbox';
 import { Svg, Path } from 'react-native-svg';
 
+import AddTodoPopup from './addTodoPopup';
+
 import { deleteTodo } from '~/constants/apiMiddleMan';
 import { accentColor, foregroundColor } from '~/constants/colours';
 
@@ -38,8 +40,9 @@ export default function Todos({
   /**
    * Handle the press event for the add todo button
    */
+  const [addTodoPopupVisible, setAddTodoPopupVisible] = React.useState(false);
   function handleAddTodoPress() {
-    console.log('Add todo pressed');
+    setAddTodoPopupVisible(true);
   }
 
   /**
@@ -97,13 +100,18 @@ export default function Todos({
         </Svg>
       </Pressable>
       <FlatList data={todoList} renderItem={renderTodoItem} />
+      <AddTodoPopup
+        visible={addTodoPopupVisible}
+        onClose={() => setAddTodoPopupVisible(false)}
+        user={user}
+        setTodoList={setTodoList}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   bodyContainer: {
-    flex: 1,
     backgroundColor: foregroundColor,
     padding: 20,
     borderRadius: 10,
@@ -112,6 +120,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 9,
+    flex: 1,
   },
   title: {
     fontSize: 60,

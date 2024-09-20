@@ -117,7 +117,7 @@ export async function addTodo(
   taskContent: string
 ): Promise<{ success: boolean; taskID: number }> {
   const form = new FormData();
-  form.append('requestType', 'addTodo');
+  form.append('requestType', 'createTodo');
   form.append('username', username);
   form.append('secureID', secureID);
   form.append('taskContent', taskContent);
@@ -169,7 +169,7 @@ export async function updateTodo(
   taskContent: string
 ): Promise<{ success: boolean }> {
   const form = new FormData();
-  form.append('requestType', 'updateTodo');
+  form.append('requestType', 'editTodo');
   form.append('username', username);
   form.append('secureID', secureID);
   form.append('taskID', taskID.toString());
