@@ -13,7 +13,7 @@ import { backgroundColor } from '../constants/colours';
 
 import Timer from '~/components/timer';
 import Todos from '~/components/todos';
-import { getPomoScore, getTodos } from '~/constants/apiMiddleMan';
+import { getPomoScore, getTodos, updatePomoScore } from '~/constants/apiMiddleMan';
 
 export default function Pomo() {
   const [partialPomoScore, setPartialPomoScore] = React.useState(0);
@@ -28,10 +28,29 @@ export default function Pomo() {
    */
   React.useEffect(() => {
     if (partialPomoScore === 8) {
-      setPartialPomoScore(0);
-      setFullPomoScore((prev) => prev + 1);
+      checkPomoScoresMatch().then(() => {
+        setPartialPomoScore(0);
+        setFullPomoScore((prev) => prev + 1);
+        updatePomoScore(user.username, user.secureID, partialPomoScore, fullPomoScore);
+      });
     }
   }, [partialPomoScore]);
+
+  /**
+   * Check if the pomo scores match the database and if not make them match
+   */
+  async function checkPomoScoresMatch() {
+    getPomoScore(user.username, user.secureID).then((response) => {
+      if (response.success) {
+        if (response.fullPomoScore !== fullPomoScore) {
+          setFullPomoScore(response.fullPomoScore);
+        }
+        if (response.partialPomoScore !== partialPomoScore) {
+          setPartialPomoScore(response.partialPomoScore);
+        }
+      }
+    });
+  }
 
   /**
    * Get the window dimensions
