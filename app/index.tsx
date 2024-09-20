@@ -68,7 +68,6 @@ export default function Pomo() {
     if (user.username && user.secureID) {
       getTodos(user.username, user.secureID).then((response) => {
         if (response.success) {
-          console.log(response.todos);
           setTodoList(response.todos);
         }
       });

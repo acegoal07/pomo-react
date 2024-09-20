@@ -4,6 +4,7 @@ import CheckBox from 'react-native-bouncy-checkbox';
 import { Svg, Path } from 'react-native-svg';
 
 import AddTodoPopup from './addTodoPopup';
+import EditTodoPopup from './editTodoPopup';
 
 import { deleteTodo } from '~/constants/apiMiddleMan';
 import { accentColor, foregroundColor } from '~/constants/colours';
@@ -46,11 +47,22 @@ export default function Todos({
   }
 
   /**
+   * Handle the press event for the edit todo button
+   */
+  const [editTodoPopupVisible, setEditTodoPopupVisible] = React.useState(false);
+  const [editTaskId, setEditTaskId] = React.useState(0);
+  const [editTaskContent, setEditTaskContent] = React.useState('');
+  function handleEditTodoPress(item: { taskID: number; taskContent: string }) {
+    setEditTaskId(item.taskID);
+    setEditTaskContent(item.taskContent);
+    setEditTodoPopupVisible(true);
+  }
+
+  /**
    * Handle the press event for the delete todo button
    * @param {{taskID: number; taskContent: string}} item The todo item to delete
    */
   function handleDeleteTodoPress(item: { taskID: number; taskContent: string }) {
-    console.log(item);
     deleteTodo(user.username, user.secureID, item.taskID).then((response) => {
       if (response.success) {
         setTodoList((prev) => prev.filter((todo) => todo.taskID !== item.taskID));
@@ -68,7 +80,6 @@ export default function Todos({
   }: {
     item: { taskID: number; taskContent: string };
   }): JSX.Element {
-    console.log(item);
     return (
       <View style={styles.todoItem}>
         <View style={styles.checkBoxContainer}>
@@ -80,7 +91,9 @@ export default function Todos({
             onPress={() => handleDeleteTodoPress(item)}
           />
         </View>
-        <Text style={styles.todoItemText}>{item.taskContent}</Text>
+        <Text style={styles.todoItemText} onPress={() => handleEditTodoPress(item)}>
+          {item.taskContent}
+        </Text>
       </View>
     );
   }
@@ -105,6 +118,15 @@ export default function Todos({
         onClose={() => setAddTodoPopupVisible(false)}
         user={user}
         setTodoList={setTodoList}
+      />
+      <EditTodoPopup
+        visible={editTodoPopupVisible}
+        onClose={() => setEditTodoPopupVisible(false)}
+        user={user}
+        setTodoList={setTodoList}
+        taskID={editTaskId}
+        taskContent={editTaskContent}
+        setTaskContent={setEditTaskContent}
       />
     </View>
   );
@@ -159,7 +181,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginTop: 8,
     backgroundColor: accentColor,
-    padding: 15,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 0 },
@@ -169,8 +190,15 @@ const styles = StyleSheet.create({
   todoItemText: {
     color: 'white',
     fontSize: 24,
+    paddingBottom: 10,
+    paddingTop: 10,
+    paddingRight: 10,
+    flex: 1,
   },
   checkBoxContainer: {
     justifyContent: 'center',
+    paddingLeft: 10,
+    paddingBottom: 10,
+    paddingTop: 10,
   },
 });
