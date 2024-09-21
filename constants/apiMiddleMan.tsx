@@ -84,6 +84,59 @@ export async function changePassword(
   return response.json();
 }
 
+/**
+ * Change the user's username
+ * @param {string} username The username of the user
+ * @param {string} secureID The secureID of the user
+ * @param {string} password The password of the user
+ * @param {string} newUsername The new username of the user
+ * @returns {{ success: boolean; code: number; }}
+ */
+export async function changeUsername(
+  username: string,
+  secureID: string,
+  password: string,
+  newUsername: string
+): Promise<{ success: boolean; code: number }> {
+  const form = new FormData();
+  form.append('requestType', 'changeUsername');
+  form.append('username', username);
+  form.append('secureID', secureID);
+  form.append('password', password);
+  form.append('newUsername', newUsername);
+
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    body: form,
+  });
+  return response.json();
+}
+
+/**
+ * Delete the user's account
+ * @param username The username of the user
+ * @param secureID The secureID of the user
+ * @param password The password of the user
+ * @returns {{ success: boolean; code: number; }}
+ */
+export async function deleteAccount(
+  username: string,
+  secureID: string,
+  password: string
+): Promise<{ success: boolean; code: number }> {
+  const form = new FormData();
+  form.append('requestType', 'deleteAccount');
+  form.append('username', username);
+  form.append('secureID', secureID);
+  form.append('password', password);
+
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    body: form,
+  });
+  return response.json();
+}
+
 //////////////// Todos Management //////////////////
 /**
  * Get users todos from the database
