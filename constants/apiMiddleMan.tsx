@@ -32,16 +32,19 @@ export async function login(
  * Register the user
  * @param {string} username The username of the user
  * @param {string} password The password of the user
+ * @param {string} confirmPassword The password of the user
  * @returns {{ success: boolean; code: number; secureID: string; }}
  */
 export async function register(
   username: string,
-  password: string
+  password: string,
+  confirmPassword: string
 ): Promise<{ success: boolean; code: number; secureID: string }> {
   const form = new FormData();
   form.append('requestType', 'register');
   form.append('username', username);
   form.append('password', password);
+  form.append('confirmPassword', confirmPassword);
 
   const response = await fetch(apiUrl, {
     method: 'POST',

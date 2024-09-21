@@ -58,6 +58,7 @@ export default function UtilityBelt({
   const [accountPopupInfoView, setAccountPopupInfoView] = React.useState(false);
   const [accountPopupChangePasswordView, setAccountPopupChangePasswordView] = React.useState(false);
   const [accountPopupLoginView, setAccountPopupLoginView] = React.useState(false);
+  const [accountPopupRegisterView, setAccountPopupRegisterView] = React.useState(false);
   /**
    * Handle the press event for the login icon
    */
@@ -126,6 +127,9 @@ export default function UtilityBelt({
         loginVisible={accountPopupLoginView}
         loginOnClose={() => setAccountPopupLoginView(false)}
         loginOnShow={() => setAccountPopupLoginView(true)}
+        registerVisible={accountPopupRegisterView}
+        registerOnClose={() => setAccountPopupRegisterView(false)}
+        registerOnShow={() => setAccountPopupRegisterView(true)}
         infoVisible={accountPopupInfoView}
         infoOnClose={() => setAccountPopupInfoView(false)}
         infoOnShow={() => setAccountPopupInfoView(true)}

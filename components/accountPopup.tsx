@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, Pressable, Modal, StyleSheet, TextInput } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 
-import { changePassword, login } from '~/constants/apiMiddleMan';
+import { changePassword, login, register } from '~/constants/apiMiddleMan';
 import { backgroundColor, accentColor } from '~/constants/colours';
 
 export default function LoginPopup({
   loginVisible,
   loginOnClose,
   loginOnShow,
+  registerVisible,
+  registerOnClose,
+  registerOnShow,
   infoVisible,
   infoOnClose,
   infoOnShow,
@@ -23,6 +26,9 @@ export default function LoginPopup({
   loginVisible: boolean;
   loginOnClose: () => void;
   loginOnShow: () => void;
+  registerVisible: boolean;
+  registerOnClose: () => void;
+  registerOnShow: () => void;
   infoVisible: boolean;
   infoOnClose: () => void;
   infoOnShow: () => void;
@@ -34,21 +40,26 @@ export default function LoginPopup({
   setFullPomoScore: React.Dispatch<React.SetStateAction<number>>;
   setPartialPomoScore: React.Dispatch<React.SetStateAction<number>>;
 }>) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [buttonHover, setButtonHover] = React.useState<{
     loginSubmitButton: boolean;
     logoutSubmitButton: boolean;
     changePasswordSubmitButton: boolean;
     changeInfoPageButton: boolean;
+    switchToRegisterButton: boolean;
     closeButton: boolean;
   }>({
     loginSubmitButton: false,
     logoutSubmitButton: false,
     changePasswordSubmitButton: false,
     changeInfoPageButton: false,
+    switchToRegisterButton: false,
     closeButton: false,
   });
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [registerUsername, setRegisterUsername] = React.useState('');
+  const [registerPassword, setRegisterPassword] = React.useState('');
+  const [registerConfirmPassword, setRegisterConfirmPassword] = React.useState('');
   const [changePasswordOld, setChangePasswordOld] = React.useState('');
   const [changePasswordNew, setChangePasswordNew] = React.useState('');
   const [changePasswordConfirm, setChangePasswordConfirm] = React.useState('');
@@ -76,28 +87,28 @@ export default function LoginPopup({
    */
   function handleLoginFormResetClose() {
     loginOnClose();
-    setUsername('');
-    setPassword('');
+    setLoginUsername('');
+    setLoginPassword('');
   }
 
   /**
    * Handle the login form submission.
    */
   function handleLogin() {
-    login(username, password).then((response) => {
+    login(loginUsername, loginPassword).then((response) => {
       if (response.success) {
         handleLoginFormResetClose();
-        localStorage.setItem('username', username);
+        localStorage.setItem('username', loginUsername);
         localStorage.setItem('secureID', response.secureID);
-        setUser({ username, secureID: response.secureID });
+        setUser({ username: loginUsername, secureID: response.secureID });
         setFullPomoScore(response.fullPomoScore);
         setPartialPomoScore(response.partialPomoScore);
       } else {
         // Handle the error
       }
     });
-    setUsername('');
-    setPassword('');
+    setLoginUsername('');
+    setLoginPassword('');
   }
 
   /**
@@ -113,6 +124,47 @@ export default function LoginPopup({
   }
 
   /**
+   * Handle the switch to register event
+   */
+  function handleSwitchToRegister() {
+    if (loginVisible) {
+      loginOnClose();
+      registerOnShow();
+      setLoginUsername('');
+      setLoginPassword('');
+    } else {
+      registerOnClose();
+      loginOnShow();
+      setLoginUsername('');
+      setLoginPassword('');
+    }
+  }
+
+  /**
+   * Handle the register event
+   */
+  function handleRegister() {
+    register(registerUsername, registerPassword, registerConfirmPassword).then((response) => {
+      if (response.success) {
+        registerOnClose();
+        localStorage.setItem('username', registerUsername);
+        localStorage.setItem('secureID', response.secureID);
+        setUser({ username: registerUsername, secureID: response.secureID });
+      }
+    });
+    setRegisterUsername('');
+    setRegisterPassword('');
+    setRegisterConfirmPassword('');
+  }
+
+  function handleRegisterOnCloseRest() {
+    registerOnClose();
+    setRegisterUsername('');
+    setRegisterPassword('');
+    setRegisterConfirmPassword('');
+  }
+
+  /**
    * Handle the switch account info view event.
    */
   function handleSwitchAccountInfoView() {
@@ -125,8 +177,8 @@ export default function LoginPopup({
     } else {
       infoOnClose();
       changePasswordOnShow();
-      setUsername('');
-      setPassword('');
+      setLoginUsername('');
+      setLoginPassword('');
     }
   }
 
@@ -186,16 +238,27 @@ export default function LoginPopup({
               <TextInput
                 style={styles.input}
                 placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
+                value={loginUsername}
+                onChangeText={setLoginUsername}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
+                value={loginPassword}
+                onChangeText={setLoginPassword}
                 secureTextEntry
               />
+              <Pressable
+                style={
+                  buttonHover.switchToRegisterButton
+                    ? { ...styles.submit, ...styles.submitButtonHover }
+                    : styles.submit
+                }
+                onPress={handleSwitchToRegister}
+                onPointerEnter={() => handleMouseEnter('switchToRegisterButton')}
+                onPointerLeave={() => handleMouseLeave('switchToRegisterButton')}>
+                <Text style={styles.submitText}>Register account</Text>
+              </Pressable>
               <Pressable
                 style={
                   buttonHover.loginSubmitButton
@@ -206,6 +269,75 @@ export default function LoginPopup({
                 onPointerEnter={() => handleMouseEnter('loginSubmitButton')}
                 onPointerLeave={() => handleMouseLeave('loginSubmitButton')}>
                 <Text style={styles.submitText}>Login</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent
+        visible={registerVisible}
+        onRequestClose={handleRegisterOnCloseRest}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Register</Text>
+            <Pressable
+              style={
+                buttonHover.closeButton
+                  ? { ...styles.closeButton, ...styles.closeButtonHover }
+                  : styles.closeButton
+              }
+              onPointerEnter={() => handleMouseEnter('closeButton')}
+              onPointerLeave={() => handleMouseLeave('closeButton')}
+              onPress={handleRegisterOnCloseRest}>
+              <Svg viewBox="0 0 384 512" style={styles.closeButtonText} fill="white">
+                <Path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+              </Svg>
+            </Pressable>
+            <View style={styles.form}>
+              <TextInput
+                style={styles.input}
+                placeholder="Username"
+                value={registerUsername}
+                onChangeText={setRegisterUsername}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                value={registerPassword}
+                onChangeText={setRegisterPassword}
+                secureTextEntry
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                value={registerConfirmPassword}
+                onChangeText={setRegisterConfirmPassword}
+                secureTextEntry
+              />
+              <Pressable
+                style={
+                  buttonHover.loginSubmitButton
+                    ? { ...styles.submit, ...styles.submitButtonHover }
+                    : styles.submit
+                }
+                onPress={handleSwitchToRegister}
+                onPointerEnter={() => handleMouseEnter('loginSubmitButton')}
+                onPointerLeave={() => handleMouseLeave('loginSubmitButton')}>
+                <Text style={styles.submitText}>Login to account</Text>
+              </Pressable>
+              <Pressable
+                style={
+                  buttonHover.loginSubmitButton
+                    ? { ...styles.submit, ...styles.submitButtonHover }
+                    : styles.submit
+                }
+                onPress={handleRegister}
+                onPointerEnter={() => handleMouseEnter('loginSubmitButton')}
+                onPointerLeave={() => handleMouseLeave('loginSubmitButton')}>
+                <Text style={styles.submitText}>Register</Text>
               </Pressable>
             </View>
           </View>
