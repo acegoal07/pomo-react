@@ -12,9 +12,9 @@ export default function LoginPopup({
   registerVisible,
   registerOnClose,
   registerOnShow,
-  infoVisible,
-  infoOnClose,
-  infoOnShow,
+  accountManagementVisible,
+  accountManagementOnClose,
+  accountManagementOnShow,
   changePasswordVisible,
   changePasswordOnClose,
   changePasswordOnShow,
@@ -29,9 +29,9 @@ export default function LoginPopup({
   registerVisible: boolean;
   registerOnClose: () => void;
   registerOnShow: () => void;
-  infoVisible: boolean;
-  infoOnClose: () => void;
-  infoOnShow: () => void;
+  accountManagementVisible: boolean;
+  accountManagementOnClose: () => void;
+  accountManagementOnShow: () => void;
   changePasswordVisible: boolean;
   changePasswordOnClose: () => void;
   changePasswordOnShow: () => void;
@@ -41,18 +41,29 @@ export default function LoginPopup({
   setPartialPomoScore: React.Dispatch<React.SetStateAction<number>>;
 }>) {
   const [buttonHover, setButtonHover] = React.useState<{
-    loginSubmitButton: boolean;
-    logoutSubmitButton: boolean;
-    changePasswordSubmitButton: boolean;
-    changeInfoPageButton: boolean;
-    switchToRegisterButton: boolean;
+    loginViewSubmitButton: boolean;
+    loginViewSwitchToRegisterButton: boolean;
+    registerViewSubmitButton: boolean;
+    registerViewSwitchToLoginButton: boolean;
+    changePasswordViewSubmitButton: boolean;
+    changePasswordBackButton: boolean;
+    accountManagementViewChangePasswordButton: boolean;
+    accountManagementViewChangeUsernameButton: boolean;
+    accountManagementViewDeleteAccountButton: boolean;
+    accountManagementViewLogoutButton: boolean;
+
     closeButton: boolean;
   }>({
-    loginSubmitButton: false,
-    logoutSubmitButton: false,
-    changePasswordSubmitButton: false,
-    changeInfoPageButton: false,
-    switchToRegisterButton: false,
+    loginViewSubmitButton: false,
+    loginViewSwitchToRegisterButton: false,
+    registerViewSubmitButton: false,
+    registerViewSwitchToLoginButton: false,
+    changePasswordViewSubmitButton: false,
+    changePasswordBackButton: false,
+    accountManagementViewChangePasswordButton: false,
+    accountManagementViewChangeUsernameButton: false,
+    accountManagementViewDeleteAccountButton: false,
+    accountManagementViewLogoutButton: false,
     closeButton: false,
   });
   const [loginUsername, setLoginUsername] = useState('');
@@ -115,7 +126,7 @@ export default function LoginPopup({
    * Handle the logout event.
    */
   function handleLogout() {
-    infoOnClose();
+    accountManagementOnClose();
     localStorage.removeItem('username');
     localStorage.removeItem('secureID');
     setUser({ username: '', secureID: '' });
@@ -157,6 +168,9 @@ export default function LoginPopup({
     setRegisterConfirmPassword('');
   }
 
+  /**
+   * Handle the register on close event
+   */
   function handleRegisterOnCloseRest() {
     registerOnClose();
     setRegisterUsername('');
@@ -167,15 +181,15 @@ export default function LoginPopup({
   /**
    * Handle the switch account info view event.
    */
-  function handleSwitchAccountInfoView() {
+  function handleSwitchAccountManagementView() {
     if (changePasswordVisible) {
-      infoOnShow();
+      accountManagementOnShow();
       changePasswordOnClose();
       setChangePasswordOld('');
       setChangePasswordNew('');
       setChangePasswordConfirm('');
     } else {
-      infoOnClose();
+      accountManagementOnClose();
       changePasswordOnShow();
       setLoginUsername('');
       setLoginPassword('');
@@ -250,24 +264,24 @@ export default function LoginPopup({
               />
               <Pressable
                 style={
-                  buttonHover.switchToRegisterButton
+                  buttonHover.loginViewSwitchToRegisterButton
                     ? { ...styles.submit, ...styles.submitButtonHover }
                     : styles.submit
                 }
                 onPress={handleSwitchToRegister}
-                onPointerEnter={() => handleMouseEnter('switchToRegisterButton')}
-                onPointerLeave={() => handleMouseLeave('switchToRegisterButton')}>
+                onPointerEnter={() => handleMouseEnter('loginViewSwitchToRegisterButton')}
+                onPointerLeave={() => handleMouseLeave('loginViewSwitchToRegisterButton')}>
                 <Text style={styles.submitText}>Register account</Text>
               </Pressable>
               <Pressable
                 style={
-                  buttonHover.loginSubmitButton
+                  buttonHover.loginViewSubmitButton
                     ? { ...styles.submit, ...styles.submitButtonHover }
                     : styles.submit
                 }
                 onPress={handleLogin}
-                onPointerEnter={() => handleMouseEnter('loginSubmitButton')}
-                onPointerLeave={() => handleMouseLeave('loginSubmitButton')}>
+                onPointerEnter={() => handleMouseEnter('loginViewSubmitButton')}
+                onPointerLeave={() => handleMouseLeave('loginViewSubmitButton')}>
                 <Text style={styles.submitText}>Login</Text>
               </Pressable>
             </View>
@@ -319,24 +333,24 @@ export default function LoginPopup({
               />
               <Pressable
                 style={
-                  buttonHover.loginSubmitButton
+                  buttonHover.registerViewSwitchToLoginButton
                     ? { ...styles.submit, ...styles.submitButtonHover }
                     : styles.submit
                 }
                 onPress={handleSwitchToRegister}
-                onPointerEnter={() => handleMouseEnter('loginSubmitButton')}
-                onPointerLeave={() => handleMouseLeave('loginSubmitButton')}>
+                onPointerEnter={() => handleMouseEnter('registerViewSwitchToLoginButton')}
+                onPointerLeave={() => handleMouseLeave('registerViewSwitchToLoginButton')}>
                 <Text style={styles.submitText}>Login to account</Text>
               </Pressable>
               <Pressable
                 style={
-                  buttonHover.loginSubmitButton
+                  buttonHover.registerViewSubmitButton
                     ? { ...styles.submit, ...styles.submitButtonHover }
                     : styles.submit
                 }
                 onPress={handleRegister}
-                onPointerEnter={() => handleMouseEnter('loginSubmitButton')}
-                onPointerLeave={() => handleMouseLeave('loginSubmitButton')}>
+                onPointerEnter={() => handleMouseEnter('registerViewSubmitButton')}
+                onPointerLeave={() => handleMouseLeave('registerViewSubmitButton')}>
                 <Text style={styles.submitText}>Register</Text>
               </Pressable>
             </View>
@@ -344,7 +358,11 @@ export default function LoginPopup({
         </View>
       </Modal>
 
-      <Modal animationType="fade" transparent visible={infoVisible} onRequestClose={infoOnClose}>
+      <Modal
+        animationType="fade"
+        transparent
+        visible={accountManagementVisible}
+        onRequestClose={accountManagementOnClose}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Account Management</Text>
@@ -356,7 +374,7 @@ export default function LoginPopup({
               }
               onPointerEnter={() => handleMouseEnter('closeButton')}
               onPointerLeave={() => handleMouseLeave('closeButton')}
-              onPress={infoOnClose}>
+              onPress={accountManagementOnClose}>
               <Svg viewBox="0 0 384 512" style={styles.closeButtonText} fill="white">
                 <Path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
               </Svg>
@@ -364,24 +382,48 @@ export default function LoginPopup({
             <View style={styles.form}>
               <Pressable
                 style={
-                  buttonHover.changeInfoPageButton
+                  buttonHover.accountManagementViewChangePasswordButton
                     ? { ...styles.submit, ...styles.submitButtonHover }
                     : styles.submit
                 }
-                onPress={() => handleSwitchAccountInfoView()}
-                onPointerEnter={() => handleMouseEnter('changeInfoPageButton')}
-                onPointerLeave={() => handleMouseLeave('changeInfoPageButton')}>
+                onPress={() => handleSwitchAccountManagementView()}
+                onPointerEnter={() => handleMouseEnter('accountManagementViewChangePasswordButton')}
+                onPointerLeave={() =>
+                  handleMouseLeave('accountManagementViewChangePasswordButton')
+                }>
                 <Text style={styles.submitText}>Change Password</Text>
+              </Pressable>
+              {/* <Pressable
+                style={
+                  buttonHover.accountManagementViewChangeUsernameButton
+                    ? { ...styles.submit, ...styles.submitButtonHover }
+                    : styles.submit
+                }
+                onPointerEnter={() => handleMouseEnter('accountManagementViewChangeUsernameButton')}
+                onPointerLeave={() =>
+                  handleMouseLeave('accountManagementViewChangeUsernameButton')
+                }>
+                <Text style={styles.submitText}>Change Username</Text>
               </Pressable>
               <Pressable
                 style={
-                  buttonHover.logoutSubmitButton
+                  buttonHover.accountManagementViewDeleteAccountButton
+                    ? { ...styles.submit, ...styles.submitButtonHover }
+                    : styles.submit
+                }
+                onPointerEnter={() => handleMouseEnter('accountManagementViewDeleteAccountButton')}
+                onPointerLeave={() => handleMouseLeave('accountManagementViewDeleteAccountButton')}>
+                <Text style={styles.submitText}>Delete Account</Text>
+              </Pressable> */}
+              <Pressable
+                style={
+                  buttonHover.accountManagementViewLogoutButton
                     ? { ...styles.submit, ...styles.submitButtonHover }
                     : styles.submit
                 }
                 onPress={handleLogout}
-                onPointerEnter={() => handleMouseEnter('logoutSubmitButton')}
-                onPointerLeave={() => handleMouseLeave('logoutSubmitButton')}>
+                onPointerEnter={() => handleMouseEnter('accountManagementViewLogoutButton')}
+                onPointerLeave={() => handleMouseLeave('accountManagementViewLogoutButton')}>
                 <Text style={styles.submitText}>Logout</Text>
               </Pressable>
             </View>
@@ -413,13 +455,13 @@ export default function LoginPopup({
             <View style={styles.form}>
               <Pressable
                 style={
-                  buttonHover.changeInfoPageButton
+                  buttonHover.changePasswordBackButton
                     ? { ...styles.submit, ...styles.submitButtonHover }
                     : styles.submit
                 }
-                onPress={() => handleSwitchAccountInfoView()}
-                onPointerEnter={() => handleMouseEnter('changeInfoPageButton')}
-                onPointerLeave={() => handleMouseLeave('changeInfoPageButton')}>
+                onPress={() => handleSwitchAccountManagementView()}
+                onPointerEnter={() => handleMouseEnter('changePasswordBackButton')}
+                onPointerLeave={() => handleMouseLeave('changePasswordBackButton')}>
                 <Text style={styles.submitText}>Back</Text>
               </Pressable>
               <TextInput
@@ -445,13 +487,13 @@ export default function LoginPopup({
               />
               <Pressable
                 style={
-                  buttonHover.changePasswordSubmitButton
+                  buttonHover.changePasswordViewSubmitButton
                     ? { ...styles.submit, ...styles.submitButtonHover }
                     : styles.submit
                 }
                 onPress={() => handleChangePassword()}
-                onPointerEnter={() => handleMouseEnter('changePasswordSubmitButton')}
-                onPointerLeave={() => handleMouseLeave('changePasswordSubmitButton')}>
+                onPointerEnter={() => handleMouseEnter('changePasswordViewSubmitButton')}
+                onPointerLeave={() => handleMouseLeave('changePasswordViewSubmitButton')}>
                 <Text style={styles.submitText}>Submit</Text>
               </Pressable>
             </View>

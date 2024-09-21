@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Modal, StyleSheet, FlatList } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 
+import { getAllTimeLeaderboard, getWeeklyLeaderboard } from '~/constants/apiMiddleMan';
 import { backgroundColor, accentColor } from '~/constants/colours';
 
 export default function LeaderboardPopup({
@@ -16,6 +17,21 @@ export default function LeaderboardPopup({
   }>({
     closeButton: false,
   });
+  const [weeklyLeaderboard, setWeeklyLeaderboard] = React.useState<
+    { username: string; scoreDifference: number }[]
+  >([]);
+  const [allTimeLeaderboard, setAllTimeLeaderboard] = React.useState<
+    { username: string; fullPomoScore: number }[]
+  >([]);
+  React.useEffect(() => {
+    getWeeklyLeaderboard().then((data) => {
+      setWeeklyLeaderboard(data.leaderboard);
+      console.log(data.leaderboard);
+    });
+    getAllTimeLeaderboard().then((data) => {
+      setAllTimeLeaderboard(data.leaderboard);
+    });
+  }, [visible === true]);
 
   /**
    * Handle the mouse entering the button and adds the hover effect
@@ -35,27 +51,44 @@ export default function LeaderboardPopup({
     setButtonHover({ ...buttonHover, [button]: false });
   }
 
+  const data = [
+    { id: '1', name: 'Player 1', score: 100 },
+    { id: '2', name: 'Player 2', score: 90 },
+    // Add more data as needed
+  ];
+
   return (
-    <Modal animationType="fade" transparent visible={visible} onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Leaderboard</Text>
-          <Pressable
-            style={
-              buttonHover.closeButton
-                ? { ...styles.closeButton, ...styles.closeButtonHover }
-                : styles.closeButton
-            }
-            onPointerEnter={() => handleMouseEnter('closeButton')}
-            onPointerLeave={() => handleMouseLeave('closeButton')}
-            onPress={onClose}>
-            <Svg viewBox="0 0 384 512" style={styles.closeButtonText} fill="white">
-              <Path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
-            </Svg>
-          </Pressable>
+    <View>
+      <Modal animationType="fade" transparent visible={visible} onRequestClose={onClose}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Weekly Leaderboard</Text>
+            <Pressable
+              style={
+                buttonHover.closeButton
+                  ? { ...styles.closeButton, ...styles.closeButtonHover }
+                  : styles.closeButton
+              }
+              onPointerEnter={() => handleMouseEnter('closeButton')}
+              onPointerLeave={() => handleMouseLeave('closeButton')}
+              onPress={onClose}>
+              <Svg viewBox="0 0 384 512" style={styles.closeButtonText} fill="white">
+                <Path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+              </Svg>
+            </Pressable>
+            <FlatList
+              data={weeklyLeaderboard}
+              renderItem={({ item }) => (
+                <View style={styles.leaderboardItem}>
+                  <Text style={styles.leaderBoardItemText}>{item.username}</Text>
+                  <Text style={styles.leaderBoardItemText}>{item.scoreDifference}</Text>
+                </View>
+              )}
+            />
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </View>
   );
 }
 
@@ -103,5 +136,19 @@ const styles = StyleSheet.create({
   closeButtonText: {
     height: 30,
     width: 30,
+  },
+  leaderboardItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    backgroundColor: accentColor,
+    padding: 10,
+    paddingLeft: 25,
+    paddingRight: 25,
+    borderRadius: 10,
+    gap: 10,
+  },
+  leaderBoardItemText: {
+    color: 'white',
   },
 });

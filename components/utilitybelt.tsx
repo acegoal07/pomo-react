@@ -55,7 +55,7 @@ export default function UtilityBelt({
     setLeaderboardPopupVisible(true);
   }
 
-  const [accountPopupInfoView, setAccountPopupInfoView] = React.useState(false);
+  const [accountManagementView, setAccountManagementView] = React.useState(false);
   const [accountPopupChangePasswordView, setAccountPopupChangePasswordView] = React.useState(false);
   const [accountPopupLoginView, setAccountPopupLoginView] = React.useState(false);
   const [accountPopupRegisterView, setAccountPopupRegisterView] = React.useState(false);
@@ -66,7 +66,7 @@ export default function UtilityBelt({
     if (user.username === '' && user.secureID === '') {
       setAccountPopupLoginView(true);
     } else {
-      setAccountPopupInfoView(true);
+      setAccountManagementView(true);
     }
   }
 
@@ -130,9 +130,9 @@ export default function UtilityBelt({
         registerVisible={accountPopupRegisterView}
         registerOnClose={() => setAccountPopupRegisterView(false)}
         registerOnShow={() => setAccountPopupRegisterView(true)}
-        infoVisible={accountPopupInfoView}
-        infoOnClose={() => setAccountPopupInfoView(false)}
-        infoOnShow={() => setAccountPopupInfoView(true)}
+        accountManagementVisible={accountManagementView}
+        accountManagementOnClose={() => setAccountManagementView(false)}
+        accountManagementOnShow={() => setAccountManagementView(true)}
         changePasswordVisible={accountPopupChangePasswordView}
         changePasswordOnClose={() => setAccountPopupChangePasswordView(false)}
         changePasswordOnShow={() => setAccountPopupChangePasswordView(true)}

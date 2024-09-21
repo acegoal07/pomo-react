@@ -310,11 +310,11 @@ export async function getAllTimeLeaderboard(): Promise<{
 
 /**
  * Get the weekly leaderboard
- * @returns {{ success: boolean; leaderboard: { username: string; fullPomoScore: number; }[]; }}
+ * @returns {{ success: boolean; leaderboard: { username: string; scoreDifference: number; }[]; }}
  */
 export async function getWeeklyLeaderboard(): Promise<{
   success: boolean;
-  leaderboard: { username: string; fullPomoScore: number }[];
+  leaderboard: { username: string; scoreDifference: number }[];
 }> {
   const form = new FormData();
   form.append('requestType', 'getWeeklyLeaderboard');
