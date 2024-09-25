@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, Modal, StyleSheet, FlatList } from 'react-native';
+import { View, Text, Pressable, Modal, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 
 import { getAllTimeLeaderboard, getWeeklyLeaderboard } from '~/constants/apiMiddleMan';
@@ -51,12 +51,6 @@ export default function LeaderboardPopup({
     setButtonHover({ ...buttonHover, [button]: false });
   }
 
-  const data = [
-    { id: '1', name: 'Player 1', score: 100 },
-    { id: '2', name: 'Player 2', score: 90 },
-    // Add more data as needed
-  ];
-
   return (
     <View>
       <Modal animationType="fade" transparent visible={visible} onRequestClose={onClose}>
@@ -76,15 +70,17 @@ export default function LeaderboardPopup({
                 <Path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
               </Svg>
             </Pressable>
-            <FlatList
-              data={weeklyLeaderboard}
-              renderItem={({ item }) => (
-                <View style={styles.leaderboardItem}>
-                  <Text style={styles.leaderBoardItemText}>{item.username}</Text>
-                  <Text style={styles.leaderBoardItemText}>{item.scoreDifference}</Text>
-                </View>
-              )}
-            />
+            <SafeAreaView>
+              <FlatList
+                data={weeklyLeaderboard}
+                renderItem={({ item }) => (
+                  <View style={styles.leaderboardItem}>
+                    <Text style={styles.leaderBoardItemText}>{item.username}</Text>
+                    <Text style={styles.leaderBoardItemText}>{item.scoreDifference}</Text>
+                  </View>
+                )}
+              />
+            </SafeAreaView>
           </View>
         </View>
       </Modal>

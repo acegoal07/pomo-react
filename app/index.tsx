@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {
   StyleSheet,
@@ -67,17 +68,19 @@ export default function Pomo() {
    * Get the user's username and secureID from the local storage
    */
   React.useEffect(() => {
-    const username = localStorage.getItem('username');
-    const secureID = localStorage.getItem('secureID');
-    if (username && secureID) {
-      setUser({ username, secureID });
-      getPomoScore(username, secureID).then((response) => {
-        if (response.success) {
-          setFullPomoScore(response.fullPomoScore);
-          setPartialPomoScore(response.partialPomoScore);
-        }
-      });
-    }
+    AsyncStorage.multiGet(['username', 'secureID']).then((response) => {
+      const username = response[0][1];
+      const secureID = response[1][1];
+      if (username && secureID) {
+        setUser({ username, secureID });
+        getPomoScore(username, secureID).then((response) => {
+          if (response.success) {
+            setFullPomoScore(response.fullPomoScore);
+            setPartialPomoScore(response.partialPomoScore);
+          }
+        });
+      }
+    });
   }, []);
 
   /**
@@ -96,7 +99,7 @@ export default function Pomo() {
   }, [user]);
 
   return (
-    <ScrollView contentContainerStyle={styles.bodyContainer}>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.bodyContainer}>
       <View style={styles.logoContainer}>
         <Image
           style={styles.logo}
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor,
     padding: 20,
     paddingTop: 10,
-    flex: 1,
+    flexGrow: 1,
     overflow: 'scroll',
   },
   logoContainer: {

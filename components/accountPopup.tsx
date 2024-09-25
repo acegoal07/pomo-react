@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
 import { View, Text, Pressable, Modal, StyleSheet, TextInput } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
@@ -98,6 +99,7 @@ export default function LoginPopup({
    */
   function handleLoginFormResetClose() {
     loginOnClose();
+
     setLoginUsername('');
     setLoginPassword('');
   }
@@ -109,8 +111,8 @@ export default function LoginPopup({
     login(loginUsername, loginPassword).then((response) => {
       if (response.success) {
         handleLoginFormResetClose();
-        localStorage.setItem('username', loginUsername);
-        localStorage.setItem('secureID', response.secureID);
+        AsyncStorage.setItem('username', loginUsername);
+        AsyncStorage.setItem('secureID', response.secureID);
         setUser({ username: loginUsername, secureID: response.secureID });
         setFullPomoScore(response.fullPomoScore);
         setPartialPomoScore(response.partialPomoScore);
@@ -127,8 +129,8 @@ export default function LoginPopup({
    */
   function handleLogout() {
     accountManagementOnClose();
-    localStorage.removeItem('username');
-    localStorage.removeItem('secureID');
+    AsyncStorage.removeItem('username');
+    AsyncStorage.removeItem('secureID');
     setUser({ username: '', secureID: '' });
     setFullPomoScore(0);
     setPartialPomoScore(0);
@@ -158,8 +160,8 @@ export default function LoginPopup({
     register(registerUsername, registerPassword, registerConfirmPassword).then((response) => {
       if (response.success) {
         registerOnClose();
-        localStorage.setItem('username', registerUsername);
-        localStorage.setItem('secureID', response.secureID);
+        AsyncStorage.setItem('username', registerUsername);
+        AsyncStorage.setItem('secureID', response.secureID);
         setUser({ username: registerUsername, secureID: response.secureID });
       }
     });
