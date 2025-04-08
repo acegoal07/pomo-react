@@ -68,7 +68,11 @@ export default function Todos({
   function handleDeleteTodoPress(item: { taskID: number; taskContent: string }) {
     deleteTodo(user.username, user.secureID, item.taskID).then((response) => {
       if (response.success) {
-        setTodoList((prev) => prev.filter((todo) => todo.taskID !== item.taskID));
+        setTodoList((prev: { taskID: number; taskContent: string }[]) =>
+          prev.filter(
+            (todo: { taskID: number; taskContent: string }) => todo.taskID !== item.taskID
+          )
+        );
       }
     });
   }
@@ -82,7 +86,7 @@ export default function Todos({
     item,
   }: {
     item: { taskID: number; taskContent: string };
-  }): JSX.Element {
+  }): React.JSX.Element {
     return (
       <View style={styles.todoItem}>
         <View style={styles.checkBoxContainer}>

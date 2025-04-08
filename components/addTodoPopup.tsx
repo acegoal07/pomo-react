@@ -60,7 +60,10 @@ export default function AddTodoPopup({
     addTodo(user.username, user.secureID, taskContent).then((response) => {
       if (response.success) {
         handleCloseReset();
-        setTodoList((prev) => [...prev, { taskID: response.taskID, taskContent }]);
+        setTodoList((prev: { taskID: number; taskContent: string }[]) => [
+          ...prev,
+          { taskID: response.taskID, taskContent },
+        ]);
       } else {
         // handle error
       }

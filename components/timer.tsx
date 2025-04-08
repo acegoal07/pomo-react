@@ -16,7 +16,7 @@ export default function Timer({
   const timeOutput = React.useRef<number>(workTime);
   const [orderPosition, setOrderPosition] = React.useState(0);
   const [counter, setCounter] = React.useState('25:00');
-  const intervalID = React.useRef<NodeJS.Timeout | null>(null);
+  const intervalID = React.useRef<NodeJS.Timeout | number | null>(null);
 
   /**
    * Start the timer
@@ -36,8 +36,8 @@ export default function Timer({
     intervalID.current = setInterval(() => {
       if (intervalID.current) {
         if (timeOutput.current <= 0) {
-          setOrderPosition((prev) => prev + 1);
-          setPartialPomoScore((prev) => prev + 1);
+          setOrderPosition((prev: number) => prev + 1);
+          setPartialPomoScore((prev: number) => prev + 1);
           stopTimer();
         } else {
           timeOutput.current = timeOutput.current - 1000;

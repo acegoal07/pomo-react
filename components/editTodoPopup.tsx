@@ -62,7 +62,9 @@ export default function EditTodoPopup({
   function handleDeleteTodo() {
     deleteTodo(user.username, user.secureID, taskID).then((response) => {
       if (response.success) {
-        setTodoList((prev) => prev.filter((item) => item.taskID !== taskID));
+        setTodoList((prev: { taskID: number; taskContent: string }[]) =>
+          prev.filter((item: { taskID: number; taskContent: string }) => item.taskID !== taskID)
+        );
         onClose();
       }
     });
@@ -78,8 +80,8 @@ export default function EditTodoPopup({
     }
     updateTodo(user.username, user.secureID, taskID, taskContent).then((response) => {
       if (response.success) {
-        setTodoList((prev) =>
-          prev.map((item) => {
+        setTodoList((prev: { taskID: number; taskContent: string }[]) =>
+          prev.map((item: { taskID: number; taskContent: string }) => {
             if (item.taskID === taskID) {
               return { ...item, taskContent };
             }

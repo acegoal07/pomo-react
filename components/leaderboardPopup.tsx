@@ -26,7 +26,6 @@ export default function LeaderboardPopup({
   React.useEffect(() => {
     getWeeklyLeaderboard().then((data) => {
       setWeeklyLeaderboard(data.leaderboard);
-      console.log(data.leaderboard);
     });
     getAllTimeLeaderboard().then((data) => {
       setAllTimeLeaderboard(data.leaderboard);
@@ -77,6 +76,18 @@ export default function LeaderboardPopup({
                   <View style={styles.leaderboardItem}>
                     <Text style={styles.leaderBoardItemText}>{item.username}</Text>
                     <Text style={styles.leaderBoardItemText}>{item.scoreDifference}</Text>
+                  </View>
+                )}
+              />
+            </SafeAreaView>
+            <Text style={styles.modalTitle}>All Time Leaderboard</Text>
+            <SafeAreaView>
+              <FlatList
+                data={allTimeLeaderboard}
+                renderItem={({ item }) => (
+                  <View style={styles.leaderboardItem}>
+                    <Text style={styles.leaderBoardItemText}>{item.username}</Text>
+                    <Text style={styles.leaderBoardItemText}>{item.fullPomoScore}</Text>
                   </View>
                 )}
               />

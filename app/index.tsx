@@ -31,7 +31,7 @@ export default function Pomo() {
     if (partialPomoScore === 8) {
       checkPomoScoresMatch().then(() => {
         setPartialPomoScore(0);
-        setFullPomoScore((prev) => prev + 1);
+        setFullPomoScore((prev: number) => prev + 1);
         updatePomoScore(user.username, user.secureID, partialPomoScore, fullPomoScore);
       });
     }
@@ -68,19 +68,23 @@ export default function Pomo() {
    * Get the user's username and secureID from the local storage
    */
   React.useEffect(() => {
-    AsyncStorage.multiGet(['username', 'secureID']).then((response) => {
-      const username = response[0][1];
-      const secureID = response[1][1];
-      if (username && secureID) {
-        setUser({ username, secureID });
-        getPomoScore(username, secureID).then((response) => {
-          if (response.success) {
-            setFullPomoScore(response.fullPomoScore);
-            setPartialPomoScore(response.partialPomoScore);
-          }
-        });
+    AsyncStorage.multiGet(['username', 'secureID']).then(
+      (response: readonly [string, string | null][]) => {
+        const username = response[0][1];
+        const secureID = response[1][1];
+        if (username && secureID) {
+          setUser({ username, secureID });
+          getPomoScore(username, secureID).then(
+            (response: { success: boolean; fullPomoScore: number; partialPomoScore: number }) => {
+              if (response.success) {
+                setFullPomoScore(response.fullPomoScore);
+                setPartialPomoScore(response.partialPomoScore);
+              }
+            }
+          );
+        }
       }
-    });
+    );
   }, []);
 
   /**
